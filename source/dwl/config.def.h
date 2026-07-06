@@ -1,38 +1,10 @@
 /* color helper */
 #define COLOR(hex)    { ((hex >> 24) & 0xFF) / 255.0f, \
-((hex >> 16) & 0xFF) / 255.0f, \
-((hex >> 8) & 0xFF) / 255.0f, \
-(hex & 0xFF) / 255.0f }
+						((hex >> 16) & 0xFF) / 255.0f, \
+						((hex >> 8) & 0xFF) / 255.0f, \
+						(hex & 0xFF) / 255.0f }
 
-/* ============================================================
- * Design Tokens
- * ============================================================
- *
- * Purpose -> Token -> Implementation
- */
-
-/* SURFACE TOKENS */
-#define SURFACE_00        0x000000ff  /* desktop/root/background */
-#define SURFACE_01        0x050805ff  /* bar/panel background */
-#define SURFACE_02        0x080c08ff  /* application surfaces */
-
-/* TEXT TOKENS */
-#define TEXT_PRIMARY      0xd8ffe0ff  /* active readable text */
-#define TEXT_SECONDARY    0x7fa88aff  /* supporting text */
-#define TEXT_MUTED        0x4d6654ff  /* inactive/metadata */
-
-/* ACCENT TOKENS */
-#define ACCENT_PRIMARY    0x39ff14ff  /* focused/active/operational */
-#define ACCENT_SECONDARY  0x1f7f35ff  /* selected/secondary emphasis */
-
-/* BORDER TOKENS */
-#define BORDER_INACTIVE   0x113311ff  /* inactive window structure */
-#define BORDER_ACTIVE     ACCENT_PRIMARY
-#define BORDER_CRITICAL   STATE_CRITICAL
-
-/* STATE TOKENS */
-#define STATE_WARNING     0xffb000ff
-#define STATE_CRITICAL    0xff0033ff
+#include "design_tokens.h"
 
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
