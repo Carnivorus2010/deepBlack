@@ -3,8 +3,11 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
 COLORS = ROOT / "design" / "tokens" / "colors.json"
+
 OUT_DWL = ROOT / "generated" / "dwl" / "design_tokens.h"
+OUT_FOOT = ROOT / "generated" / "foot" / "foot.ini"
 
 GROUPS = {
     "SURFACE": "Surface Tokens",
@@ -19,9 +22,30 @@ def group_for(name: str) -> str:
     return name.split("_", 1)[0]
 
 
-def main() -> None:
-    tokens = json.loads(COLORS.read_text())
+def resolve_token(tokens: dict[str, str], value: str) -> str:
+    """Resolve aliases like BORDER_ACTIVE -> ACCENT_PRIMARY -> 0x39ff14ff."""
+    seen = set()
 
+    while value in tokens:
+        if value in seen:
+            raise ValueError(f"circular token reference detected: {value}")
+        seen.add(value)
+        value = tokens[value]
+
+    return value
+
+
+def c_to_hex(tokens: dict[str, str], name: str) -> str:
+    """Convert C-style 0xRRGGBBAA token to foot-style RRGGBB."""
+    value = resolve_token(tokens, tokens[name])
+
+    if not value.startswith("0x") or len(value) != 10:
+        raise ValueError(f"{name} does not resolve to 0xRRGGBBAA: {value}")
+
+    return value[2:8]
+
+
+def generate_dwl(tokens: dict[str, str]) -> None:
     lines = [
         "/*",
         " * ============================================================",
@@ -60,8 +84,56 @@ def main() -> None:
 
     OUT_DWL.parent.mkdir(parents=True, exist_ok=True)
     OUT_DWL.write_text("\n".join(lines))
-
     print(f"[deepBlack] generated {OUT_DWL}")
+
+
+def generate_foot(tokens: dict[str, str]) -> None:
+    lines = [
+        "# Auto-generated from design/tokens/colors.json",
+        "# Do not edit by hand.",
+        "",
+        "[main]",
+        "font=JetBrainsMono Nerd Font Mono:size=12",
+        "pad=8x8",
+        "",
+        "[colors-dark]",
+        f"foreground={c_to_hex(tokens, 'TEXT_PRIMARY')}",
+        f"background={c_to_hex(tokens, 'SURFACE_00')}",
+        "",
+        f"regular0={c_to_hex(tokens, 'SURFACE_00')}",
+        f"regular1={c_to_hex(tokens, 'STATE_CRITICAL')}",
+        f"regular2={c_to_hex(tokens, 'ACCENT_PRIMARY')}",
+        f"regular3={c_to_hex(tokens, 'STATE_WARNING')}",
+        f"regular4={c_to_hex(tokens, 'ACCENT_SECONDARY')}",
+        f"regular5={c_to_hex(tokens, 'TEXT_SECONDARY')}",
+        f"regular6={c_to_hex(tokens, 'ACCENT_DIAGNOSTIC')}",
+        f"regular7={c_to_hex(tokens, 'TEXT_PRIMARY')}",
+        "",
+        f"bright0={c_to_hex(tokens, 'TEXT_MUTED')}",
+        f"bright1={c_to_hex(tokens, 'STATE_CRITICAL')}",
+        f"bright2={c_to_hex(tokens, 'ACCENT_PRIMARY')}",
+        f"bright3={c_to_hex(tokens, 'STATE_WARNING')}",
+        f"bright4={c_to_hex(tokens, 'ACCENT_SECONDARY')}",
+        f"bright5={c_to_hex(tokens, 'TEXT_SECONDARY')}",
+        f"bright6={c_to_hex(tokens, 'ACCENT_DIAGNOSTIC')}",
+        f"bright7={c_to_hex(tokens, 'TEXT_PRIMARY')}",
+        "",
+        f"selection-foreground={c_to_hex(tokens, 'SURFACE_00')}",
+        f"selection-background={c_to_hex(tokens, 'ACCENT_PRIMARY')}",
+        f"cursor={c_to_hex(tokens, 'ACCENT_PRIMARY')} {c_to_hex(tokens, 'SURFACE_00')}",
+        "",
+    ]
+
+    OUT_FOOT.parent.mkdir(parents=True, exist_ok=True)
+    OUT_FOOT.write_text("\n".join(lines))
+    print(f"[deepBlack] generated {OUT_FOOT}")
+
+
+def main() -> None:
+    tokens = json.loads(COLORS.read_text())
+
+    generate_dwl(tokens)
+    generate_foot(tokens)
 
 
 if __name__ == "__main__":
