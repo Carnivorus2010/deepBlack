@@ -140,10 +140,17 @@ static const char *menucmd[] = {
 	"-S", "#39ff14",  /* ACCENT_PRIMARY */
 	NULL
 };
+static const char *scrnsht[] = {
+	"/bin/sh",
+	"-c",
+	"$HOME/Projects/deepBlack/scripts/screenshot.sh",
+	NULL
+};
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: 2 -> at, etc. */
 	/* modifier                  key                  function          argument */
+	{ MODKEY,                    XKB_KEY_s,           spawn,            {.v = scrnsht} },
 	{ MODKEY,                    XKB_KEY_e,           spawn,            {.v = filemgr} },
 	{ MODKEY,                    XKB_KEY_h,           spawn,            {.v = editor} },
 	{ MODKEY,                    XKB_KEY_n,           spawn,            {.v = passmgr} },
