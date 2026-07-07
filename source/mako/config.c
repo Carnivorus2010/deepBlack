@@ -12,6 +12,8 @@
 #include "string-util.h"
 #include "types.h"
 
+static void init_deepblack_urgency_criteria(struct mako_config *config);
+
 static int32_t max(int32_t a, int32_t b) {
 	return (a > b) ? a : b;
 }
@@ -21,6 +23,8 @@ void init_default_config(struct mako_config *config) {
 	struct mako_criteria *new_criteria = create_criteria(config);
 	init_default_style(&new_criteria->style);
 	new_criteria->raw_string = strdup("(root)");
+
+	init_deepblack_urgency_criteria(config);
 
 	// Hide grouped notifications by default, and put the group count in
 	// their format...
@@ -67,6 +71,80 @@ void finish_config(struct mako_config *config) {
 
 	finish_style(&config->superstyle);
 }
+
+
+static void init_deepblack_urgency_style(
+		struct mako_criteria *criteria,
+		enum mako_notification_urgency urgency,
+		uint32_t border,
+		uint32_t progress,
+		int timeout,
+		bool ignore_timeout,
+		const char *raw_string) {
+	init_empty_style(&criteria->style);
+
+	criteria->urgency = urgency;
+	criteria->spec.urgency = true;
+
+	/*
+	 * Built-in urgency criteria should not style hidden placeholder
+	 * notifications. This mirrors the behavior of user criteria parsing.
+	 */
+	criteria->hidden = false;
+	criteria->spec.hidden = true;
+
+	criteria->style.colors.border = border;
+	criteria->style.spec.colors.border = true;
+
+	criteria->style.colors.progress.value = progress;
+	criteria->style.colors.progress.operator = CAIRO_OPERATOR_OVER;
+	criteria->style.spec.colors.progress = true;
+
+	criteria->style.default_timeout = timeout;
+	criteria->style.spec.default_timeout = true;
+
+	if (ignore_timeout) {
+		criteria->style.ignore_timeout = true;
+		criteria->style.spec.ignore_timeout = true;
+	}
+
+	criteria->raw_string = strdup(raw_string);
+}
+
+static void init_deepblack_urgency_criteria(struct mako_config *config) {
+	struct mako_criteria *criteria;
+
+	criteria = create_criteria(config);
+	init_deepblack_urgency_style(
+		criteria,
+		MAKO_NOTIFICATION_URGENCY_LOW,
+		DB_MAKO_LOW_BORDER,
+		DB_MAKO_LOW_PROGRESS,
+		DB_MAKO_LOW_TIMEOUT,
+		false,
+		"(deepBlack urgency=low)");
+
+	criteria = create_criteria(config);
+	init_deepblack_urgency_style(
+		criteria,
+		MAKO_NOTIFICATION_URGENCY_NORMAL,
+		DB_MAKO_NORMAL_BORDER,
+		DB_MAKO_NORMAL_PROGRESS,
+		DB_MAKO_NORMAL_TIMEOUT,
+		false,
+		"(deepBlack urgency=normal)");
+
+	criteria = create_criteria(config);
+	init_deepblack_urgency_style(
+		criteria,
+		MAKO_NOTIFICATION_URGENCY_CRITICAL,
+		DB_MAKO_CRITICAL_BORDER,
+		DB_MAKO_CRITICAL_PROGRESS,
+		DB_MAKO_CRITICAL_TIMEOUT,
+		true,
+		"(deepBlack urgency=critical)");
+}
+
 
 void init_default_style(struct mako_style *style) {
 	style->width = DB_MAKO_WIDTH;
