@@ -1,8 +1,7 @@
 [Unit]
 Description=deepBlack source-tokenized Mako notification daemon
 Documentation=https://github.com/emersion/mako
-PartOf=graphical-session.target
-After=graphical-session.target
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
