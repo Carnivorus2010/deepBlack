@@ -498,6 +498,18 @@ static struct wlr_xwayland *xwayland;
 /* configuration, allows nested code to access above variables */
 #include "config.h"
 
+/* deepBlack/wlroots0.20 compatibility
+ * Some generated xdg-shell headers may not expose SINCE_VERSION macros
+ * for newer xdg_toplevel events even when the compositor source expects them.
+ */
+#ifndef XDG_TOPLEVEL_CONFIGURE_BOUNDS_SINCE_VERSION
+#define XDG_TOPLEVEL_CONFIGURE_BOUNDS_SINCE_VERSION 4
+#endif
+
+#ifndef XDG_TOPLEVEL_WM_CAPABILITIES_SINCE_VERSION
+#define XDG_TOPLEVEL_WM_CAPABILITIES_SINCE_VERSION 5
+#endif
+
 /* attempt to encapsulate suck into one file */
 #include "client.h"
 
