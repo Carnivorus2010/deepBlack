@@ -1,0 +1,14 @@
+[Unit]
+Description=deepBlack source-tokenized Mako notification daemon
+Documentation=https://github.com/emersion/mako
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/Projects/deepBlack/scripts/deepblack-mako.sh
+Restart=on-failure
+RestartSec=1
+
+[Install]
+WantedBy=default.target
