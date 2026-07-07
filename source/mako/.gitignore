@@ -1,0 +1,4 @@
+/subprojects/
+
+# Mako build artifacts
+source/mako/build/
