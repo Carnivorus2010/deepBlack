@@ -127,7 +127,6 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 
 /* commands */
 /* commands */
-static const char *filemgr[] = { "pcmanfm", NULL};
 static const char *passmgr[] = { "bitwarden-desktop", NULL};
 static const char *browser[] = { "chromium", NULL };
 static const char *termcmd[] = { "foot", NULL };
@@ -150,6 +149,12 @@ static const char *editor [] = {
 	"/bin/sh",
 	"-c",
 	"$HOME/Projects/deepBlack/scripts/editor.sh",
+	NULL
+};
+static const char *filemgr[] = {
+	"/bin/sh",
+	"-c",
+	"$HOME/Projects/deepBlack/scripts/files.sh",
 	NULL
 };
 
