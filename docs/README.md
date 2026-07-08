@@ -13,3 +13,4 @@ Documentation records component behavior, design decisions, roadmap items, and i
 
 - Changelog: `docs/changelog.md`
 - Roadmap: `docs/roadmap.md`
+- Install notes: `docs/install.md`

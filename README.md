@@ -47,6 +47,10 @@ Project documentation lives in:
 
     docs/
 
+Install and dependency notes:
+
+    docs/install.md
+
 Component documentation:
 
     docs/components/neovim.md
