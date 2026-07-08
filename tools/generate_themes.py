@@ -120,7 +120,7 @@ def generate_foot(tokens: dict[str, str]) -> None:
         "",
         f"selection-foreground={c_to_hex(tokens, 'SURFACE_00')}",
         f"selection-background={c_to_hex(tokens, 'ACCENT_PRIMARY')}",
-        f"cursor={c_to_hex(tokens, 'ACCENT_PRIMARY')} {c_to_hex(tokens, 'SURFACE_00')}",
+        f"cursor={c_to_hex(tokens, 'SURFACE_00')} {c_to_hex(tokens, 'TEXT_SECONDARY')}",
         "",
     ]
 
