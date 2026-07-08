@@ -30,16 +30,17 @@ Tokenized Yazi file manager integration.
 - Yazi source configuration under config/yazi/.
 - Yazi install flow through scripts/install-yazi.sh.
 
+### Post-v0.1.5 Documentation Pass
+
+Project documentation was refreshed after the v0.1.5 code/config checkpoint.
+
+- Added Yazi component documentation.
+- Updated Neovim documentation for the current MOD + h / ALT+h launch path.
+- Updated dwl keybind documentation.
+- Added install and dependency notes.
+- Removed outdated references to older file manager and editor launch paths.
+
 ## Next v0.1.x Work
-
-### Documentation Audit
-
-Bring all project documentation in line with the current implementation.
-
-- Remove stale keybind references.
-- Remove old application references.
-- Document current launch paths.
-- Document source/generated/install relationships.
 
 ### Login / Session Layer
 

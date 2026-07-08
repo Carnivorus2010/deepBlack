@@ -204,4 +204,4 @@ Important generated paths:
     generated/yazi/theme.toml
     source/dwl/config.h
 
-When generated output looks stale, rerun the relevant generator or install script.
+When generated output looks out of date, rerun the relevant generator or install script.
