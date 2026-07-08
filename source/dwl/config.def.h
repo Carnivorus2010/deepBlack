@@ -34,6 +34,7 @@ static const Rule rules[] = {
 	/* app_id             title       tags mask     isfloating   monitor */
 	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
 	{ "firefox_EXAMPLE",  NULL,       1 << 8,       0,           -1 }, /* Start on ONLY tag "9" */
+	{ "deepblack-editor", NULL,       0,            0,           -1 }, /* Neovim inside Foot */
     /* default/example rule: can be changed but cannot be eliminated; at least one rule must exist */
 };
 
@@ -126,8 +127,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 
 /* commands */
 /* commands */
-static const char *editor [] = { "kate", NULL};
-static const char *filemgr[] = {"pcmanfm", NULL};
+static const char *filemgr[] = { "pcmanfm", NULL};
 static const char *passmgr[] = { "bitwarden-desktop", NULL};
 static const char *browser[] = { "chromium", NULL };
 static const char *termcmd[] = { "foot", NULL };
@@ -146,6 +146,12 @@ static const char *scrnsht[] = {
 	"$HOME/Projects/deepBlack/scripts/screenshot.sh",
 	NULL
 };
+static const char *editor [] = {
+	"/bin/sh",
+	"-c",
+	"$HOME/Projects/deepBlack/scripts/editor.sh",
+	NULL
+};
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: 2 -> at, etc. */
@@ -162,8 +168,8 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_k,           focusstack,       {.i = -1} },
 	{ MODKEY,                    XKB_KEY_i,           incnmaster,       {.i = +1} },
 	{ MODKEY,                    XKB_KEY_p,           incnmaster,       {.i = -1} },
-	{ MODKEY,                    XKB_KEY_h,           setmfact,         {.f = -0.05f} },
-	{ MODKEY,                    XKB_KEY_l,           setmfact,         {.f = +0.05f} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_h,           setmfact,         {.f = -0.05f} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_l,           setmfact,         {.f = +0.05f} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,      zoom,             {0} },
 	{ MODKEY,                    XKB_KEY_Tab,         view,             {0} },
 	{ MODKEY,                    XKB_KEY_q,           killclient,       {0} },

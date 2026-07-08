@@ -9,3 +9,5 @@ build/
 
 # Mako build artifacts
 source/mako/build/
+*.orig
+*.rej
