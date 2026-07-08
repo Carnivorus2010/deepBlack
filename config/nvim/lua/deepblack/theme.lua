@@ -41,7 +41,18 @@ function M.apply()
   hl("NormalFloat", { fg = t.TEXT_PRIMARY, bg = t.SURFACE_03 })
   hl("FloatBorder", { fg = t.BORDER_ACTIVE, bg = t.SURFACE_03 })
 
+  -- Cursor language
+  -- ACCENT_PRIMARY communicates current focus / active insertion point.
   hl("Cursor", { fg = t.SURFACE_00, bg = t.ACCENT_PRIMARY })
+  hl("lCursor", { fg = t.SURFACE_00, bg = t.ACCENT_PRIMARY })
+  hl("CursorIM", { fg = t.SURFACE_00, bg = t.ACCENT_PRIMARY })
+
+  hl("CursorInsert", { fg = t.ACCENT_PRIMARY, bg = t.ACCENT_PRIMARY })
+  hl("CursorReplace", { fg = t.SURFACE_00, bg = t.STATE_WARNING })
+
+  hl("TermCursor", { fg = t.SURFACE_00, bg = t.ACCENT_PRIMARY })
+  hl("TermCursorNC", { fg = t.TEXT_MUTED, bg = t.SURFACE_02 })
+
   hl("CursorLine", { bg = t.SURFACE_01 })
   hl("CursorLineNr", { fg = t.ACCENT_PRIMARY, bg = t.SURFACE_01, bold = true })
   hl("LineNr", { fg = t.TEXT_MUTED, bg = t.SURFACE_00 })
@@ -87,6 +98,39 @@ function M.apply()
   hl("Title", { fg = t.ACCENT_PRIMARY, bold = true })
   hl("NonText", { fg = t.TEXT_MUTED })
   hl("EndOfBuffer", { fg = t.SURFACE_00 })
+
+  -- Yank feedback
+  hl("YankHighlight", { fg = t.SURFACE_00, bg = t.ACCENT_PRIMARY, bold = true })
+
+  -- Telescope
+  hl("TelescopeNormal", { fg = t.TEXT_PRIMARY, bg = t.SURFACE_03 })
+  hl("TelescopeBorder", { fg = t.BORDER_ACTIVE, bg = t.SURFACE_03 })
+  hl("TelescopePromptNormal", { fg = t.TEXT_PRIMARY, bg = t.SURFACE_02 })
+  hl("TelescopePromptBorder", { fg = t.BORDER_ACTIVE, bg = t.SURFACE_02 })
+  hl("TelescopePromptPrefix", { fg = t.ACCENT_PRIMARY, bg = t.SURFACE_02 })
+  hl("TelescopeSelection", { fg = t.SURFACE_00, bg = t.ACCENT_PRIMARY, bold = true })
+  hl("TelescopeMatching", { fg = t.ACCENT_DIAGNOSTIC, bold = true })
+
+  -- NvimTree
+  hl("NvimTreeNormal", { fg = t.TEXT_PRIMARY, bg = t.SURFACE_01 })
+  hl("NvimTreeNormalNC", { fg = t.TEXT_SECONDARY, bg = t.SURFACE_01 })
+  hl("NvimTreeCursorLine", { bg = t.SURFACE_03 })
+  hl("NvimTreeFolderName", { fg = t.ACCENT_DIAGNOSTIC })
+  hl("NvimTreeOpenedFolderName", { fg = t.ACCENT_PRIMARY, bold = true })
+  hl("NvimTreeRootFolder", { fg = t.ACCENT_PRIMARY, bold = true })
+  hl("NvimTreeIndentMarker", { fg = t.TEXT_MUTED })
+  hl("NvimTreeGitDirty", { fg = t.STATE_WARNING })
+  hl("NvimTreeGitNew", { fg = t.STATE_SUCCESS })
+  hl("NvimTreeGitDeleted", { fg = t.STATE_CRITICAL })
+
+  -- Bufferline / tab-like buffer bar
+  hl("BufferLineFill", { bg = t.SURFACE_00 })
+  hl("BufferLineBackground", { fg = t.TEXT_MUTED, bg = t.SURFACE_00 })
+  hl("BufferLineBufferVisible", { fg = t.TEXT_SECONDARY, bg = t.SURFACE_00 })
+  hl("BufferLineBufferSelected", { fg = t.ACCENT_PRIMARY, bg = t.SURFACE_01, bold = true })
+  hl("BufferLineSeparator", { fg = t.BORDER_INACTIVE, bg = t.SURFACE_00 })
+  hl("BufferLineSeparatorSelected", { fg = t.BORDER_ACTIVE, bg = t.SURFACE_01 })
+  hl("BufferLineIndicatorSelected", { fg = t.ACCENT_PRIMARY, bg = t.SURFACE_01 })
 end
 
 return M

@@ -1,3 +1,22 @@
+-- Cursor behavior
+-- Uses highlight groups defined in deepblack/theme.lua.
+vim.opt.guicursor = table.concat({
+	"n-v-c:block-Cursor",
+	"i-ci-ve:ver25-CursorInsert",
+	"r-cr:hor20-CursorReplace",
+	"o:hor50-Cursor",
+	"a:blinkon0",
+}, ",")
+
+-- Cursor behavior
+vim.opt.guicursor = table.concat({
+	"n-v-c:block-Cursor",
+	"i-ci-ve:ver25-CursorInsert",
+	"r-cr:hor20-CursorReplace",
+	"o:hor50-Cursor",
+	"a:blinkon0",
+}, ",")
+
 vim.opt.termguicolors = true
 vim.opt.background = "dark"
 
