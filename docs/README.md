@@ -6,8 +6,12 @@ Documentation records component behavior, design decisions, roadmap items, and i
 
 ## Components
 
-- Neovim: `docs/components/neovim.md`
-- Yazi: `docs/components/yazi.md`
+- [Session layer](components/session.md)
+- [dwl](components/dwl.md)
+- [Foot](components/foot.md)
+- [Mako](components/mako.md)
+- [Neovim](components/neovim.md)
+- [Yazi](components/yazi.md)
 
 ## Project Documents
 

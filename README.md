@@ -20,6 +20,7 @@ v0.1.5 adds tokenized Yazi file manager integration.
 | Component | Role |
 | :--- | :--- |
 | dwl | Wayland compositor and keybind router |
+| Session/Login Layer | greetd, tuigreet, and deepBlack session startup |
 | Foot | terminal surface |
 | Neovim | primary text editor |
 | Yazi | primary file manager |
@@ -53,6 +54,7 @@ Install and dependency notes:
 
 Component documentation:
 
+    docs/components/session.md
     docs/components/neovim.md
     docs/components/yazi.md
 

@@ -4,6 +4,24 @@ Configuration sources for user-facing deepBlack components.
 
 These files are source configuration, not generated output.
 
+### greetd
+
+`config/greetd/config.toml` is the tracked source template for the deepBlack greetd login/session configuration.
+
+It is intended to be installed to:
+
+    /etc/greetd/config.toml
+
+This file should launch the installed deepBlack session command rather than a user-local repository path.
+
+### Wayland Sessions
+
+`config/wayland-sessions/deepblack.desktop` defines the deepBlack Wayland session entry.
+
+It is intended to be installed to:
+
+    /usr/share/wayland-sessions/deepblack.desktop
+
 ## Neovim
 
 Neovim is the primary text editor component for deepBlack.

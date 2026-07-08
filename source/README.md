@@ -2,7 +2,8 @@
 
 Part of the deepBlack operating environment project.
 
-This directory contains source-managed components that deepBlack builds, vendors, or configures directly.
+This directory contains source-managed components that deepBlack builds, vendors, or configures
+directly.
 
 ## Directories
 
@@ -10,7 +11,11 @@ This directory contains source-managed components that deepBlack builds, vendors
 
 The compositor layer.
 
-Responsible for window management, keybind routing, monitor behavior, input behavior, and launching core workflows.
+The deepBlack session layer launches into the installed dwl compositor through the canonical
+session launcher documented in `docs/components/session.md`.
+
+Responsible for window management, keybind routing, monitor behavior, input behavior,
+and launching core workflows.
 
 Primary source configuration:
 
@@ -20,7 +25,8 @@ Primary source configuration:
 
 Vendored notification daemon source.
 
-deepBlack uses source-level Mako integration so notification behavior can align with the operating environment instead of relying only on external theme files.
+deepBlack uses source-level Mako integration so notification behavior can align with the operating
+environment instead of relying only on external theme files.
 
 Project-specific notes:
 
@@ -30,4 +36,5 @@ Project-specific notes:
 
 deepBlack prefers source-level integration where practical.
 
-The goal is to build a coherent operating environment rather than stack unrelated themes over unrelated applications.
+The goal is to build a coherent operating environment rather than stack unrelated themes
+over unrelated applications.

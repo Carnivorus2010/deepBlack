@@ -4,6 +4,14 @@ This directory contains the deepBlack build of dwl.
 
 dwl is the compositor layer of the operating environment. It is responsible for window management, keybind routing, monitor layout, input behavior, workspace tags, and launching core user-facing components.
 
+The login/session layer reaches dwl through the canonical deepBlack session launcher:
+
+    scripts/session.sh
+
+When installed for greetd, that launcher is expected at:
+
+    /usr/local/bin/deepblack-session
+
 This build is source-configured through:
 
     source/dwl/config.def.h

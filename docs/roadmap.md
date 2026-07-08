@@ -44,13 +44,24 @@ Project documentation was refreshed after the v0.1.5 code/config checkpoint.
 
 ### Login / Session Layer
 
-Evaluate and integrate a login/session entry point.
+Integrate a minimal greetd-based login/session entry point.
 
-Candidate direction:
+Current direction:
 
-- greetd
-- tuigreet or another minimal greeter
-- deepBlack-aligned session startup
+- greetd as the login/session manager.
+- tuigreet as the initial console-native greeter.
+- scripts/session.sh as the canonical deepBlack session launcher.
+- config/greetd/config.toml as the tracked greetd source template.
+- config/wayland-sessions/deepblack.desktop as the tracked Wayland session entry.
+- Manual install path documented before enabling greetd.service.
+
+Testing priority:
+
+- Verify the session launcher directly.
+- Install the session script and templates into system paths.
+- Confirm greetd launches tuigreet.
+- Confirm tuigreet launches the deepBlack dwl session.
+- Avoid visual greeter polish until the session flow is stable.
 
 ### GUI Fallbacks
 

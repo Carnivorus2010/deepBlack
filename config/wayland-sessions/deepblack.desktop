@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=deepBlack
+Comment=deepBlack dwl session
+Exec=/usr/local/bin/deepblack-session
+Type=Application
+DesktopNames=deepBlack

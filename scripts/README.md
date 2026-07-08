@@ -6,6 +6,16 @@ Scripts provide stable launch and install surfaces between dwl keybinds, generat
 
 ## Launchers
 
+### session.sh
+
+Starts the deepBlack Wayland session.
+
+This is the canonical session entry point used by the login/session layer.
+
+For greetd usage, it is intended to be installed as:
+
+    /usr/local/bin/deepblack-session
+
 ### editor.sh
 
 Launches Neovim inside Foot as the deepBlack editor surface.

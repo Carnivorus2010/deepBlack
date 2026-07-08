@@ -2,6 +2,16 @@
 
 Design and implementation decisions should be logged here.
 
+## Unreleased
+
+### Added
+
+- Began greetd-based login/session layer integration.
+- Added `scripts/session.sh` as the canonical deepBlack session launcher.
+- Added `config/greetd/config.toml` as the tracked greetd source template.
+- Added `config/wayland-sessions/deepblack.desktop` as the tracked Wayland session entry.
+- Added initial session layer documentation.
+
 ## v0.1.5
 
 Tokenized Yazi file manager integration.

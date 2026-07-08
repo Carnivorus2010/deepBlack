@@ -61,6 +61,13 @@ Required for the current deepBlack workflow.
     chromium
     bitwarden-desktop
 
+### Session/Login Layer
+
+Required for the greetd-based login/session flow.
+
+    greetd
+    greetd-tuigreet
+
 ### Mako Source Build Support
 
 Required for the vendored Mako notification daemon.
@@ -112,6 +119,36 @@ Generated build output:
     source/dwl/config.h
 
 The generated config.h file should not be treated as the source of truth.
+
+### Session/Login Layer
+
+Source session launcher:
+
+    scripts/session.sh
+
+Source greetd configuration:
+
+    config/greetd/config.toml
+
+Source Wayland session entry:
+
+    config/wayland-sessions/deepblack.desktop
+
+Expected system install paths:
+
+    /usr/local/bin/deepblack-session
+    /etc/greetd/config.toml
+    /usr/share/wayland-sessions/deepblack.desktop
+
+The intended session flow is:
+
+    greetd
+        -> tuigreet
+        -> deepblack-session
+        -> dwl
+
+Do not enable greetd.service until /usr/local/bin/deepblack-session exists,
+is executable, and the session has been tested manually.
 
 ### Neovim
 
@@ -177,15 +214,21 @@ After cloning the repository:
 1. Install required system packages.
 2. Build and install dwl.
 3. Build vendored Mako if needed.
-4. Run Neovim install script:
+4. Install and verify the session/login layer:
+
+       scripts/session.sh
+       config/greetd/config.toml
+       config/wayland-sessions/deepblack.desktop
+
+5. Run Neovim install script:
 
        scripts/install-nvim.sh
 
-5. Run Yazi install script:
+6. Run Yazi install script:
 
        scripts/install-yazi.sh
 
-6. Verify launch keybinds:
+7. Verify launch keybinds:
 
        ALT + Return  terminal
        ALT + d       launcher
