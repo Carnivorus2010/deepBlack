@@ -10,8 +10,25 @@ export QT_QPA_PLATFORM=wayland
 export SDL_VIDEODRIVER=wayland
 export CLUTTER_BACKEND=wayland
 
-if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
-    exec dbus-run-session dwl
+AUTOSTART="/usr/local/bin/deepblack-autostart"
+STATUS="/usr/local/bin/deepblack-status"
+
+if [ -x "$AUTOSTART" ]; then
+    set -- dwl -s "$AUTOSTART"
 else
-    exec dwl
+    set -- dwl
+fi
+
+if [ -x "$STATUS" ]; then
+    if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
+        "$STATUS" | dbus-run-session -- "$@"
+    else
+        "$STATUS" | "$@"
+    fi
+else
+    if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
+        exec dbus-run-session -- "$@"
+    else
+        exec "$@"
+    fi
 fi

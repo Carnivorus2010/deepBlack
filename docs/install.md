@@ -14,6 +14,8 @@ Important source directories:
     source/mako/
     config/nvim/
     config/yazi/
+    config/greetd/
+    config/wayland-sessions/
     scripts/
     generated/
 
@@ -61,7 +63,7 @@ Required for the current deepBlack workflow.
     chromium
     bitwarden-desktop
 
-### Session/Login Layer
+### Login Packages
 
 Required for the greetd-based login/session flow.
 
@@ -104,6 +106,12 @@ Thunar may be installed as an optional GUI fallback:
 
 This is not the primary file manager path.
 
+### Status Provider
+
+The deepBlack session status helper uses `slstatus -s` when available.
+
+If `slstatus` is not available, it falls back to a simple date/time loop.
+
 ## Component Install Flow
 
 ### dwl
@@ -120,11 +128,16 @@ Generated build output:
 
 The generated config.h file should not be treated as the source of truth.
 
-### Session/Login Layer
+### Login / Session Startup
 
 Source session launcher:
 
     scripts/session.sh
+
+Source session helpers:
+
+    scripts/autostart.sh
+    scripts/status.sh
 
 Source greetd configuration:
 
@@ -137,18 +150,41 @@ Source Wayland session entry:
 Expected system install paths:
 
     /usr/local/bin/deepblack-session
+    /usr/local/bin/deepblack-autostart
+    /usr/local/bin/deepblack-status
     /etc/greetd/config.toml
     /usr/share/wayland-sessions/deepblack.desktop
+
+Manual install commands:
+
+    sudo install -Dm755 scripts/session.sh /usr/local/bin/deepblack-session
+    sudo install -Dm755 scripts/autostart.sh /usr/local/bin/deepblack-autostart
+    sudo install -Dm755 scripts/status.sh /usr/local/bin/deepblack-status
+    sudo install -Dm644 config/greetd/config.toml /etc/greetd/config.toml
+    sudo install -Dm644 config/wayland-sessions/deepblack.desktop /usr/share/wayland-sessions/deepblack.desktop
 
 The intended session flow is:
 
     greetd
         -> tuigreet
         -> deepblack-session
-        -> dwl
+        -> deepblack-status | dwl -s deepblack-autostart
 
-Do not enable greetd.service until /usr/local/bin/deepblack-session exists,
-is executable, and the session has been tested manually.
+Session helper responsibilities:
+
+    deepblack-session     prepares the Wayland session and launches dwl
+    deepblack-autostart   starts session background services such as wallpaper
+    deepblack-status      writes status text to dwl through stdin
+
+Do not enable greetd.service until the session has been installed and tested manually.
+
+Before enabling greetd.service, confirm that:
+
+    /usr/local/bin/deepblack-session
+    /usr/local/bin/deepblack-autostart
+    /usr/local/bin/deepblack-status
+
+exist, are executable, and work from a temporary greetd start test.
 
 ### Neovim
 
@@ -214,9 +250,11 @@ After cloning the repository:
 1. Install required system packages.
 2. Build and install dwl.
 3. Build vendored Mako if needed.
-4. Install and verify the session/login layer:
+4. Install and verify the login/session layer:
 
        scripts/session.sh
+       scripts/autostart.sh
+       scripts/status.sh
        config/greetd/config.toml
        config/wayland-sessions/deepblack.desktop
 

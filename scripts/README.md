@@ -16,6 +16,28 @@ For greetd usage, it is intended to be installed as:
 
     /usr/local/bin/deepblack-session
 
+### autostart.sh
+
+Starts session background services for the deepBlack dwl session.
+
+Current responsibilities:
+
+    swaybg wallpaper startup
+
+For greetd usage, it is intended to be installed as:
+
+    /usr/local/bin/deepblack-autostart
+
+### status.sh
+
+Provides status text to the deepBlack dwl bar.
+
+It uses `slstatus -s` when available and falls back to a simple date/time loop.
+
+For greetd usage, it is intended to be installed as:
+
+    /usr/local/bin/deepblack-status
+
 ### editor.sh
 
 Launches Neovim inside Foot as the deepBlack editor surface.

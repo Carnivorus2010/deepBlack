@@ -44,6 +44,16 @@ During system installation, this script should be installed to:
 
 The greetd configuration should launch that installed session command rather than referencing a user-local repository path.
 
+## Session Startup Helpers
+
+The session launcher starts dwl with project-controlled helper scripts.
+
+Tracked helper scripts:
+
+```text
+scripts/autostart.sh
+scripts/status.sh
+
 ## Tracked Configuration
 
 Source templates live under:

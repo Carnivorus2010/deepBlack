@@ -5,12 +5,20 @@ Design and implementation decisions should be logged here.
 ## Unreleased
 
 ### Added
-
+- Added `scripts/autostart.sh` for deepBlack session background startup.
+- Added `scripts/status.sh` for dwl bar status input.
 - Began greetd-based login/session layer integration.
 - Added `scripts/session.sh` as the canonical deepBlack session launcher.
 - Added `config/greetd/config.toml` as the tracked greetd source template.
 - Added `config/wayland-sessions/deepblack.desktop` as the tracked Wayland session entry.
 - Added initial session layer documentation.
+
+### Tested
+
+- Verified temporary greetd startup from a control TTY.
+- Verified tuigreet login launches the deepBlack dwl session.
+- Verified wallpaper autostart, dwl bar status input, and primary keybinds inside the greetd-launched session.
+- Verified exiting dwl returns to tuigreet.
 
 ## v0.1.5
 
