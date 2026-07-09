@@ -2,7 +2,7 @@
 
 Design and implementation decisions should be logged here.
 
-## Unreleased
+## v0.1.6
 
 ### Added
 

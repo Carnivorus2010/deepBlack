@@ -40,7 +40,7 @@ Project documentation was refreshed after the v0.1.5 code/config checkpoint.
 - Added install and dependency notes.
 - Removed outdated references to older file manager and editor launch paths.
 
-### Pre-v0.1.6 Login / Session Layer
+### v0.1.6 Login / Session Layer
 
 Implemented, reboot-tested, and token-polished the greetd-based login/session entry point.
 
@@ -67,12 +67,6 @@ Release intent:
 
 ## Next v0.1.x Work
 
-### v0.1.6 Release Finalization
-
-- Run final reboot verification after the VT palette layer.
-- Audit session/login documentation.
-- Merge the greetd token polish branch into main.
-- Tag the final v0.1.6 release.
 
 ### GUI Fallbacks
 

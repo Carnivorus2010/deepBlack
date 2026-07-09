@@ -11,9 +11,9 @@ deepBlack is built around dwl, Foot, source-tokenized configuration, and a restr
 
 Current tagged checkpoint:
 
-    v0.1.5
+    v0.1.6
 
-v0.1.5 adds tokenized Yazi file manager integration.
+v0.1.6 adds the tokenized greetd login/session layer.
 
 ## Core Components
 
