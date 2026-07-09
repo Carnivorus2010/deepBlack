@@ -40,13 +40,9 @@ Project documentation was refreshed after the v0.1.5 code/config checkpoint.
 - Added install and dependency notes.
 - Removed outdated references to older file manager and editor launch paths.
 
-## Next v0.1.x Work
+### Pre-v0.1.6 Login / Session Layer
 
-### Login / Session Layer
-
-Integrate a minimal greetd-based login/session entry point.
-
-Current direction:
+Implemented and reboot-tested a minimal greetd-based login/session entry point.
 
 - greetd as the login/session manager.
 - tuigreet as the initial console-native greeter.
@@ -62,6 +58,8 @@ Testing priority:
 - Confirm greetd launches tuigreet.
 - Confirm tuigreet launches the deepBlack dwl session.
 - Avoid visual greeter polish until the session flow is stable.
+
+## Next v0.1.x Work
 
 ### GUI Fallbacks
 

@@ -15,6 +15,9 @@ Design and implementation decisions should be logged here.
 
 ### Tested
 
+- Verified reboot into greetd/tuigreet on VT1.
+- Verified login from greetd launches the full deepBlack dwl session.
+- Verified wallpaper autostart, dwl status input, primary keybinds, and logout-to-greeter behavior after reboot.
 - Verified temporary greetd startup from a control TTY.
 - Verified tuigreet login launches the deepBlack dwl session.
 - Verified wallpaper autostart, dwl bar status input, and primary keybinds inside the greetd-launched session.

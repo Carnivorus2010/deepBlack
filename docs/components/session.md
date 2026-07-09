@@ -94,3 +94,16 @@ Before enabling greetd, confirm that:
 exists, is executable, and successfully launches the deepBlack dwl session.
 
 Keep a fallback TTY available while testing the login/session layer.
+
+## Tested State
+
+The greetd session path has been tested from a temporary service start and from a reboot with `greetd.service` enabled.
+
+Verified behavior:
+
+    boot -> greetd/tuigreet on VT1
+    login -> deepblack-session
+    deepblack-status | dwl -s deepblack-autostart
+    logout -> tuigreet
+
+The legacy manual dwl launch line in `~/.bash_profile` has been disabled on the development system so greetd owns session startup.
