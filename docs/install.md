@@ -16,6 +16,7 @@ Important source directories:
     config/yazi/
     config/greetd/
     config/wayland-sessions/
+    config/systemd/
     scripts/
     generated/
 
@@ -139,6 +140,11 @@ Source session helpers:
     scripts/autostart.sh
     scripts/status.sh
 
+Source virtual terminal palette helpers:
+
+    scripts/generate-vt-palette.sh
+    scripts/apply-vt-palette.sh
+
 Source greetd configuration:
 
     config/greetd/config.toml
@@ -147,21 +153,33 @@ Source Wayland session entry:
 
     config/wayland-sessions/deepblack.desktop
 
+Source systemd drop-in:
+
+    config/systemd/greetd.service.d/deepblack-vt-palette.conf
+
 Expected system install paths:
 
     /usr/local/bin/deepblack-session
     /usr/local/bin/deepblack-autostart
     /usr/local/bin/deepblack-status
+    /usr/local/bin/deepblack-apply-vt-palette
+    /usr/local/share/deepblack/vtrgb
     /etc/greetd/config.toml
     /usr/share/wayland-sessions/deepblack.desktop
+    /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
 
 Manual install commands:
 
+    scripts/generate-vt-palette.sh
     sudo install -Dm755 scripts/session.sh /usr/local/bin/deepblack-session
     sudo install -Dm755 scripts/autostart.sh /usr/local/bin/deepblack-autostart
     sudo install -Dm755 scripts/status.sh /usr/local/bin/deepblack-status
+    sudo install -Dm755 scripts/apply-vt-palette.sh /usr/local/bin/deepblack-apply-vt-palette
+    sudo install -Dm644 generated/greetd/vtrgb /usr/local/share/deepblack/vtrgb
     sudo install -Dm644 config/greetd/config.toml /etc/greetd/config.toml
     sudo install -Dm644 config/wayland-sessions/deepblack.desktop /usr/share/wayland-sessions/deepblack.desktop
+    sudo install -Dm644 config/systemd/greetd.service.d/deepblack-vt-palette.conf /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
+    sudo systemctl daemon-reload
 
 The intended session flow is:
 
@@ -170,11 +188,21 @@ The intended session flow is:
         -> deepblack-session
         -> deepblack-status | dwl -s deepblack-autostart
 
+Virtual terminal palette flow:
+
+    generated/dwl/design_tokens.h
+        -> scripts/generate-vt-palette.sh
+        -> generated/greetd/vtrgb
+        -> /usr/local/share/deepblack/vtrgb
+        -> setvtrgb
+        -> tuigreet ANSI theme roles
+
 Session helper responsibilities:
 
-    deepblack-session     prepares the Wayland session and launches dwl
-    deepblack-autostart   starts session background services such as wallpaper
-    deepblack-status      writes status text to dwl through stdin
+    deepblack-session            prepares the Wayland session and launches dwl
+    deepblack-autostart          starts session background services such as wallpaper
+    deepblack-status             writes status text to dwl through stdin
+    deepblack-apply-vt-palette   applies the generated VT palette before greetd starts
 
 Do not enable greetd.service until the session has been installed and tested manually.
 
@@ -183,6 +211,7 @@ Before enabling greetd.service, confirm that:
     /usr/local/bin/deepblack-session
     /usr/local/bin/deepblack-autostart
     /usr/local/bin/deepblack-status
+    /usr/local/bin/deepblack-apply-vt-palette
 
 exist, are executable, and work from a temporary greetd start test.
 
@@ -255,8 +284,11 @@ After cloning the repository:
        scripts/session.sh
        scripts/autostart.sh
        scripts/status.sh
+       scripts/generate-vt-palette.sh
+       scripts/apply-vt-palette.sh
        config/greetd/config.toml
        config/wayland-sessions/deepblack.desktop
+       config/systemd/greetd.service.d/deepblack-vt-palette.conf
 
 5. Run Neovim install script:
 
@@ -283,6 +315,7 @@ Important generated paths:
     generated/dwl/design_tokens.h
     generated/nvim/
     generated/yazi/theme.toml
+    generated/greetd/vtrgb
     source/dwl/config.h
 
 When generated output looks out of date, rerun the relevant generator or install script.

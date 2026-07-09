@@ -38,6 +38,17 @@ For greetd usage, it is intended to be installed as:
 
     /usr/local/bin/deepblack-status
 
+### apply-vt-palette.sh
+
+Applies the generated deepBlack virtual terminal color palette using `setvtrgb`.
+
+For greetd usage, it is intended to be installed as:
+
+    /usr/local/bin/deepblack-apply-vt-palette
+
+This helper is safe-failing. If `setvtrgb` or the palette file is unavailable, it exits
+without blocking login.
+
 ### editor.sh
 
 Launches Neovim inside Foot as the deepBlack editor surface.
@@ -91,5 +102,20 @@ Reads:
 Writes:
 
     generated/yazi/theme.toml
+
+The generated file should not be edited by hand.
+
+### generate-vt-palette.sh
+
+Reads:
+
+    generated/dwl/design_tokens.h
+
+Writes:
+
+    generated/greetd/vtrgb
+
+The generated palette maps deepBlack semantic color tokens onto the Linux virtual
+terminal ANSI color slots used by tuigreet.
 
 The generated file should not be edited by hand.

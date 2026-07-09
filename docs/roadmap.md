@@ -42,24 +42,37 @@ Project documentation was refreshed after the v0.1.5 code/config checkpoint.
 
 ### Pre-v0.1.6 Login / Session Layer
 
-Implemented and reboot-tested a minimal greetd-based login/session entry point.
+Implemented, reboot-tested, and token-polished the greetd-based login/session entry point.
 
 - greetd as the login/session manager.
 - tuigreet as the initial console-native greeter.
 - scripts/session.sh as the canonical deepBlack session launcher.
+- scripts/autostart.sh as the deepBlack session background startup helper.
+- scripts/status.sh as the dwl bar status provider.
+- scripts/generate-vt-palette.sh as the virtual terminal palette generator.
+- scripts/apply-vt-palette.sh as the safe VT palette application helper.
 - config/greetd/config.toml as the tracked greetd source template.
 - config/wayland-sessions/deepblack.desktop as the tracked Wayland session entry.
+- config/systemd/greetd.service.d/deepblack-vt-palette.conf as the tracked greetd systemd drop-in template.
 - Manual install path documented before enabling greetd.service.
+- Reboot into greetd/tuigreet on VT1 verified.
+- Login into the full deepBlack dwl session verified.
+- Logout-to-greeter behavior verified.
+- tuigreet ANSI theme roles mapped through the generated deepBlack VT palette.
 
-Testing priority:
+Release intent:
 
-- Verify the session launcher directly.
-- Install the session script and templates into system paths.
-- Confirm greetd launches tuigreet.
-- Confirm tuigreet launches the deepBlack dwl session.
-- Avoid visual greeter polish until the session flow is stable.
+- This work is tracked as the v0.1.6-pre.1 foundation plus polish work toward the final v0.1.6 checkpoint.
+- Final v0.1.6 should represent the completed login/session layer.
 
 ## Next v0.1.x Work
+
+### v0.1.6 Release Finalization
+
+- Run final reboot verification after the VT palette layer.
+- Audit session/login documentation.
+- Merge the greetd token polish branch into main.
+- Tag the final v0.1.6 release.
 
 ### GUI Fallbacks
 

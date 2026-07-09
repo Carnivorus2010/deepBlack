@@ -6,13 +6,15 @@ These files are source configuration, not generated output.
 
 ### greetd
 
-`config/greetd/config.toml` is the tracked source template for the deepBlack greetd login/session configuration.
+`config/greetd/config.toml` is the tracked source template for the deepBlack greetd
+login/session configuration.
 
 It is intended to be installed to:
 
     /etc/greetd/config.toml
 
-This file should launch the installed deepBlack session command rather than a user-local repository path.
+This file should launch the installed deepBlack session command rather than a user-local
+repository path.
 
 ### Wayland Sessions
 
@@ -21,6 +23,17 @@ This file should launch the installed deepBlack session command rather than a us
 It is intended to be installed to:
 
     /usr/share/wayland-sessions/deepblack.desktop
+
+### systemd
+
+`config/systemd/greetd.service.d/deepblack-vt-palette.conf` is the tracked source template
+for the greetd systemd drop-in.
+
+It is intended to be installed to:
+
+    /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
+
+The drop-in applies the deepBlack virtual terminal palette before greetd starts.
 
 ## Neovim
 
@@ -46,7 +59,8 @@ Design role:
 - Motion: MOTION_INSTANT for text input
 - Color: generated from generated/dwl/design_tokens.h
 
-ACCENT_PRIMARY is reserved for cursor emphasis, current line number, selections, and active syntax states. It should not become decoration.
+ACCENT_PRIMARY is reserved for cursor emphasis, current line number, selections,
+and active syntax states. It should not become decoration.
 
 ## Yazi
 
