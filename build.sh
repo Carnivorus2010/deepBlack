@@ -6,6 +6,7 @@ DWL_DIR="$ROOT/source/dwl"
 GENERATED_DIR="$ROOT/generated"
 CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 MACHINE="${DEEPBLACK_MACHINE:-generic}"
+FLAVOR="${DEEPBLACK_FLAVOR:-deepblack}"
 
 step() {
   printf '\n[deepBlack] %s\n' "$1"
@@ -13,15 +14,20 @@ step() {
 
 usage() {
   cat <<USAGE
-Usage: ./build.sh [--machine PROFILE]
+Usage: ./build.sh [--machine PROFILE] [--flavor PROFILE]
 
 Available machine profiles:
 $(find "$ROOT/profiles/machines" -maxdepth 1 -type f -name '*.json' \
   -printf '  %f\n' | sed 's/\.json$//')
 
+Available flavor profiles:
+$(find "$ROOT/profiles/flavors" -maxdepth 1 -type f -name '*.json' \
+  -printf '  %f\n' | sed 's/\.json$//')
+
 Examples:
   ./build.sh
   ./build.sh --machine silverbullet
+  ./build.sh --machine silverbullet --flavor nord
 USAGE
 }
 
@@ -34,6 +40,15 @@ while (($# > 0)); do
       fi
 
       MACHINE="$2"
+      shift 2
+      ;;
+    --flavor)
+      if (($# < 2)); then
+        printf 'error: --flavor requires a profile name\n' >&2
+        exit 2
+      fi
+
+      FLAVOR="$2"
       shift 2
       ;;
     -h|--help)
@@ -49,9 +64,16 @@ while (($# > 0)); do
 done
 
 PROFILE_FILE="$ROOT/profiles/machines/$MACHINE.json"
+FLAVOR_FILE="$ROOT/profiles/flavors/$FLAVOR.json"
 
 if [[ ! -f "$PROFILE_FILE" ]]; then
   printf 'error: machine profile not found: %s\n' "$MACHINE" >&2
+  usage >&2
+  exit 2
+fi
+
+if [[ ! -f "$FLAVOR_FILE" ]]; then
+  printf 'error: flavor profile not found: %s\n' "$FLAVOR" >&2
   usage >&2
   exit 2
 fi
@@ -61,9 +83,9 @@ step "Generating machine profile: $MACHINE"
 
 FOOT_FONT_SIZE="$(<"$GENERATED_DIR/machine/foot-font-size")"
 
-step "Generating shared dwl and Foot assets"
+step "Generating shared assets for flavor: $FLAVOR"
 DEEPBLACK_FOOT_FONT_SIZE="$FOOT_FONT_SIZE" \
-  "$ROOT/tools/generate_themes.py"
+  "$ROOT/tools/generate_themes.py" --flavor "$FLAVOR"
 
 step "Syncing generated headers into dwl"
 install -Dm644 \
@@ -95,7 +117,7 @@ sudo install -Dm644 \
   "$GENERATED_DIR/greetd/vtrgb" \
   "/usr/local/share/deepblack/vtrgb"
 
-step "Building dwl for machine profile: $MACHINE"
+step "Building dwl for machine: $MACHINE, flavor: $FLAVOR"
 cd "$DWL_DIR"
 rm -f config.h
 make clean
@@ -104,4 +126,4 @@ make
 step "Installing dwl"
 sudo make install
 
-step "Build completed successfully for machine profile: $MACHINE"
+step "Build completed successfully for machine: $MACHINE, flavor: $FLAVOR"

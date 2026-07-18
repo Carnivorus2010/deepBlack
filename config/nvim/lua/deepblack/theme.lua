@@ -3,19 +3,39 @@ local M = {}
 local fallback = {
   SURFACE_00 = "#000000",
   SURFACE_01 = "#050805",
-  SURFACE_02 = "#0b120d",
+  SURFACE_02 = "#080c08",
   SURFACE_03 = "#101a12",
   SURFACE_04 = "#17231a",
-  TEXT_PRIMARY = "#d8f7df",
-  TEXT_SECONDARY = "#8fa897",
+
+  TEXT_PRIMARY = "#d8ffe0",
+  TEXT_SECONDARY = "#7fa88a",
   TEXT_MUTED = "#4d6654",
+
   ACCENT_PRIMARY = "#39ff14",
-  ACCENT_DIAGNOSTIC = "#66ff99",
-  BORDER_INACTIVE = "#1a2a1d",
+  ACCENT_SECONDARY = "#1f7f35",
+  ACCENT_DIAGNOSTIC = "#7cff9b",
+
+  BORDER_INACTIVE = "#113311",
   BORDER_ACTIVE = "#39ff14",
+  BORDER_CRITICAL = "#ff0033",
+
   STATE_SUCCESS = "#39ff14",
-  STATE_WARNING = "#d6b85a",
-  STATE_CRITICAL = "#ff3b3b",
+  STATE_WARNING = "#ffb000",
+  STATE_CRITICAL = "#ff0033",
+
+  SYNTAX_COMMENT = "#4d6654",
+  SYNTAX_KEYWORD = "#c792ea",
+  SYNTAX_FUNCTION = "#7cff9b",
+  SYNTAX_STRING = "#8fd6a0",
+  SYNTAX_NUMBER = "#d6b85a",
+  SYNTAX_TYPE = "#66c7d1",
+  SYNTAX_CONSTANT = "#ff9e64",
+  SYNTAX_OPERATOR = "#9fb8a6",
+  SYNTAX_SPECIAL = "#ffd166",
+  SYNTAX_VARIABLE = "#d8ffe0",
+  SYNTAX_PROPERTY = "#5fbf8f",
+  SYNTAX_PARAMETER = "#b6d9bf",
+  SYNTAX_PREPROC = "#b48ead",
 }
 
 local function tokens()
@@ -72,16 +92,108 @@ function M.apply()
   hl("PmenuSbar", { bg = t.SURFACE_02 })
   hl("PmenuThumb", { bg = t.TEXT_MUTED })
 
-  hl("Comment", { fg = t.TEXT_MUTED, italic = true })
-  hl("Constant", { fg = t.TEXT_PRIMARY })
-  hl("String", { fg = t.TEXT_SECONDARY })
-  hl("Identifier", { fg = t.TEXT_PRIMARY })
-  hl("Function", { fg = t.ACCENT_DIAGNOSTIC })
-  hl("Statement", { fg = t.ACCENT_PRIMARY })
-  hl("Keyword", { fg = t.ACCENT_PRIMARY })
-  hl("Type", { fg = t.TEXT_SECONDARY })
-  hl("PreProc", { fg = t.TEXT_SECONDARY })
-  hl("Special", { fg = t.ACCENT_DIAGNOSTIC })
+  -- Syntax language
+  hl("Comment", { fg = t.SYNTAX_COMMENT, italic = true })
+
+  hl("Constant", { fg = t.SYNTAX_CONSTANT })
+  hl("String", { fg = t.SYNTAX_STRING })
+  hl("Character", { fg = t.SYNTAX_STRING })
+  hl("Number", { fg = t.SYNTAX_NUMBER })
+  hl("Boolean", { fg = t.SYNTAX_CONSTANT, bold = true })
+  hl("Float", { fg = t.SYNTAX_NUMBER })
+
+  hl("Identifier", { fg = t.SYNTAX_VARIABLE })
+  hl("Function", { fg = t.SYNTAX_FUNCTION })
+
+  hl("Statement", { fg = t.SYNTAX_KEYWORD })
+  hl("Conditional", { fg = t.SYNTAX_KEYWORD })
+  hl("Repeat", { fg = t.SYNTAX_KEYWORD })
+  hl("Label", { fg = t.SYNTAX_KEYWORD })
+  hl("Keyword", { fg = t.SYNTAX_KEYWORD })
+  hl("Exception", { fg = t.SYNTAX_KEYWORD })
+  hl("Operator", { fg = t.SYNTAX_OPERATOR })
+
+  hl("Type", { fg = t.SYNTAX_TYPE })
+  hl("StorageClass", { fg = t.SYNTAX_TYPE })
+  hl("Structure", { fg = t.SYNTAX_TYPE })
+  hl("Typedef", { fg = t.SYNTAX_TYPE })
+
+  hl("PreProc", { fg = t.SYNTAX_PREPROC })
+  hl("Include", { fg = t.SYNTAX_PREPROC })
+  hl("Define", { fg = t.SYNTAX_PREPROC })
+  hl("Macro", { fg = t.SYNTAX_PREPROC })
+  hl("PreCondit", { fg = t.SYNTAX_PREPROC })
+
+  hl("Special", { fg = t.SYNTAX_SPECIAL })
+  hl("SpecialChar", { fg = t.SYNTAX_SPECIAL })
+  hl("Tag", { fg = t.SYNTAX_SPECIAL })
+  hl("Delimiter", { fg = t.SYNTAX_OPERATOR })
+  hl("SpecialComment", { fg = t.SYNTAX_COMMENT })
+  hl("Debug", { fg = t.STATE_WARNING })
+
+  hl("Property", { fg = t.SYNTAX_PROPERTY })
+  hl("Parameter", { fg = t.SYNTAX_PARAMETER })
+
+  -- Treesitter capture language. These are harmless until a parser is active.
+  hl("@comment", { link = "Comment" })
+  hl("@comment.documentation", { link = "Comment" })
+
+  hl("@string", { link = "String" })
+  hl("@string.documentation", { link = "String" })
+  hl("@string.regexp", { link = "Special" })
+  hl("@character", { link = "Character" })
+
+  hl("@number", { link = "Number" })
+  hl("@number.float", { link = "Float" })
+  hl("@boolean", { link = "Boolean" })
+
+  hl("@constant", { link = "Constant" })
+  hl("@constant.builtin", { link = "Constant" })
+  hl("@constant.macro", { link = "Constant" })
+
+  hl("@variable", { link = "Identifier" })
+  hl("@variable.builtin", { link = "Special" })
+  hl("@variable.member", { link = "Property" })
+  hl("@property", { link = "Property" })
+  hl("@field", { link = "Property" })
+  hl("@variable.parameter", { link = "Parameter" })
+  hl("@parameter", { link = "Parameter" })
+
+  hl("@function", { link = "Function" })
+  hl("@function.call", { link = "Function" })
+  hl("@function.builtin", { link = "Function" })
+  hl("@function.macro", { link = "Macro" })
+  hl("@function.method", { link = "Function" })
+  hl("@function.method.call", { link = "Function" })
+  hl("@method", { link = "Function" })
+  hl("@method.call", { link = "Function" })
+  hl("@constructor", { link = "Type" })
+
+  hl("@keyword", { link = "Keyword" })
+  hl("@keyword.function", { link = "Keyword" })
+  hl("@keyword.operator", { link = "Keyword" })
+  hl("@keyword.return", { link = "Keyword" })
+  hl("@keyword.conditional", { link = "Conditional" })
+  hl("@keyword.repeat", { link = "Repeat" })
+  hl("@keyword.exception", { link = "Exception" })
+  hl("@operator", { link = "Operator" })
+
+  hl("@type", { link = "Type" })
+  hl("@type.builtin", { link = "Type" })
+  hl("@type.definition", { link = "Typedef" })
+  hl("@module", { link = "Type" })
+  hl("@namespace", { link = "Type" })
+
+  hl("@attribute", { link = "PreProc" })
+  hl("@attribute.builtin", { link = "PreProc" })
+
+  hl("@punctuation.delimiter", { link = "Delimiter" })
+  hl("@punctuation.bracket", { link = "Delimiter" })
+  hl("@punctuation.special", { link = "Special" })
+
+  hl("@tag", { link = "Tag" })
+  hl("@tag.attribute", { link = "Property" })
+  hl("@tag.delimiter", { link = "Delimiter" })
 
   hl("DiagnosticError", { fg = t.STATE_CRITICAL })
   hl("DiagnosticWarn", { fg = t.STATE_WARNING })
