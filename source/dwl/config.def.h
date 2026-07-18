@@ -5,6 +5,7 @@
 						(hex & 0xFF) / 255.0f }
 
 #include "design_tokens.h"
+#include "machine_profile.h"
 
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
@@ -51,11 +52,7 @@ static const Layout layouts[] = {
  * WARNING: negative values other than (-1, -1) cause problems with Xwayland clients due to
  * https://gitlab.freedesktop.org/xorg/xserver/-/issues/899 */
 static const MonitorRule monrules[] = {
-   /* name        mfact  nmaster scale layout       rotate/reflect                x    y
-    * example of a HiDPI laptop monitor:
-    { "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 }, */
-	{ NULL,       0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
-	/* default monitor rule: can be changed but cannot be eliminated; at least one monitor rule must exist */
+	DB_MONITOR_RULES
 };
 
 /* keyboard */
@@ -74,7 +71,7 @@ static const int repeat_delay = 200;
 static const int tap_to_click = 1;
 static const int tap_and_drag = 1;
 static const int drag_lock = 1;
-static const int natural_scrolling = 0;
+static const int natural_scrolling = DB_NATURAL_SCROLLING;
 static const int disable_while_typing = 1;
 static const int left_handed = 0;
 static const int middle_button_emulation = 0;
@@ -114,7 +111,7 @@ LIBINPUT_CONFIG_TAP_MAP_LMR -- 1/2/3 finger tap maps to left/middle/right
 static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TAP_MAP_LRM;
 
 /* If you want to use the windows key for MODKEY, use WLR_MODIFIER_LOGO */
-#define MODKEY WLR_MODIFIER_ALT
+#define MODKEY DB_MODKEY
 
 #define TAGKEYS(KEY,SKEY,TAG) \
 	{ MODKEY,                    KEY,            view,            {.ui = 1 << TAG} }, \

@@ -11,3 +11,9 @@ build/
 source/mako/build/
 *.orig
 *.rej
+
+/source/dwl/machine_profile.h
+
+# Python bytecode
+__pycache__/
+*.py[cod]

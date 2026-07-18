@@ -1,0 +1,15 @@
+{
+  "id": "generic",
+  "description": "Portable deepBlack defaults for unknown hardware",
+  "foot_font_size": 12,
+  "natural_scrolling": false,
+  "modkey": "ALT",
+  "monitors": [
+    {
+      "name": null,
+      "mfact": 0.55,
+      "nmaster": 1,
+      "scale": 1.0
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "silverbullet",
+  "description": "Early 2015 13-inch MacBook Pro Retina",
+  "foot_font_size": 15,
+  "natural_scrolling": true,
+  "modkey": "LOGO",
+  "monitors": [
+    {
+      "name": "eDP-1",
+      "mfact": 0.55,
+      "nmaster": 1,
+      "scale": 1.75
+    },
+    {
+      "name": null,
+      "mfact": 0.55,
+      "nmaster": 1,
+      "scale": 1.0
+    }
+  ]
+}

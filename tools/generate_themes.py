@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,13 +88,13 @@ def generate_dwl(tokens: dict[str, str]) -> None:
     print(f"[deepBlack] generated {OUT_DWL}")
 
 
-def generate_foot(tokens: dict[str, str]) -> None:
+def generate_foot(tokens: dict[str, str], foot_font_size: int) -> None:
     lines = [
         "# Auto-generated from design/tokens/colors.json",
         "# Do not edit by hand.",
         "",
         "[main]",
-        "font=JetBrainsMono Nerd Font Mono:size=12",
+        f"font=JetBrainsMono Nerd Font Mono:size={foot_font_size}",
         "pad=8x8",
         "",
         "[colors-dark]",
@@ -131,9 +132,10 @@ def generate_foot(tokens: dict[str, str]) -> None:
 
 def main() -> None:
     tokens = json.loads(COLORS.read_text())
+    foot_font_size = int(os.environ.get("DEEPBLACK_FOOT_FONT_SIZE", "12"))
 
     generate_dwl(tokens)
-    generate_foot(tokens)
+    generate_foot(tokens, foot_font_size)
 
 
 if __name__ == "__main__":
