@@ -14,6 +14,7 @@ FLAVORS_DIR = ROOT / "profiles" / "flavors"
 
 OUT_DWL = ROOT / "generated" / "dwl" / "design_tokens.h"
 OUT_FOOT = ROOT / "generated" / "foot" / "foot.ini"
+OUT_WMENU = ROOT / "generated" / "wmenu" / "deepblack-wmenu"
 
 REQUIRED_TOKENS = {
     "SURFACE_00",
@@ -98,7 +99,30 @@ def load_flavor(flavor: str) -> tuple[Path, dict[str, str]]:
         if not isinstance(name, str) or not isinstance(value, str):
             raise ValueError("token names and values must be strings")
 
-    return path, tokens
+    foot = profile.get("foot", {})
+    if not isinstance(foot, dict):
+        raise ValueError("flavor foot settings must be an object")
+
+    alpha = foot.get("alpha", 1.0)
+    alpha_mode = foot.get("alpha_mode", "default")
+
+    if isinstance(alpha, bool) or not isinstance(alpha, (int, float)):
+        raise ValueError("foot alpha must be a number")
+
+    if not 0.0 <= float(alpha) <= 1.0:
+        raise ValueError("foot alpha must be between 0.0 and 1.0")
+
+    if alpha_mode not in {"default", "matching", "all"}:
+        raise ValueError(
+            "foot alpha_mode must be default, matching, or all"
+        )
+
+    foot_settings = {
+        "alpha": float(alpha),
+        "alpha_mode": alpha_mode,
+    }
+
+    return path, tokens, foot_settings
 
 
 def resolve_token(tokens: dict[str, str], value: str) -> str:
@@ -187,6 +211,7 @@ def generate_foot(
     source: Path,
     flavor: str,
     foot_font_size: int,
+    foot_settings: dict[str, Any],
 ) -> None:
     source_name = source.relative_to(ROOT)
 
@@ -200,6 +225,8 @@ def generate_foot(
         "pad=8x8",
         "",
         "[colors-dark]",
+        f"alpha={foot_settings['alpha']:.2f}",
+        f"alpha-mode={foot_settings['alpha_mode']}",
         f"foreground={c_to_hex(tokens, 'TEXT_PRIMARY')}",
         f"background={c_to_hex(tokens, 'SURFACE_00')}",
         "",
@@ -234,6 +261,39 @@ def generate_foot(
     print(f"[deepBlack] generated {OUT_FOOT}")
 
 
+
+def generate_wmenu(
+    tokens: dict[str, str],
+    source: Path,
+    flavor: str,
+) -> None:
+    source_name = source.relative_to(ROOT)
+
+    lines = [
+        "#!/usr/bin/env sh",
+        f"# Auto-generated from {source_name}",
+        f"# Flavor: {flavor}",
+        "# Do not edit by hand.",
+        "",
+        "exec wmenu-run \\",
+        '  -f "JetBrainsMono Nerd Font 12" \\',
+        f'  -n "{c_to_hex(tokens, "TEXT_PRIMARY")}" \\',
+        f'  -N "{c_to_hex(tokens, "SURFACE_00")}" \\',
+        f'  -m "{c_to_hex(tokens, "ACCENT_PRIMARY")}" \\',
+        f'  -M "{c_to_hex(tokens, "SURFACE_01")}" \\',
+        f'  -s "{c_to_hex(tokens, "SURFACE_00")}" \\',
+        f'  -S "{c_to_hex(tokens, "ACCENT_PRIMARY")}" \\',
+        '  "$@"',
+        "",
+    ]
+
+    OUT_WMENU.parent.mkdir(parents=True, exist_ok=True)
+    OUT_WMENU.write_text("\n".join(lines), encoding="utf-8")
+    OUT_WMENU.chmod(0o755)
+
+    print(f"[deepBlack] generated {OUT_WMENU}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -244,7 +304,7 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        source, tokens = load_flavor(args.flavor)
+        source, tokens, foot_settings = load_flavor(args.flavor)
 
         foot_font_size = int(
             os.environ.get("DEEPBLACK_FOOT_FONT_SIZE", "12")
@@ -256,7 +316,14 @@ def main() -> int:
             )
 
         generate_dwl(tokens, source, args.flavor)
-        generate_foot(tokens, source, args.flavor, foot_font_size)
+        generate_foot(
+            tokens,
+            source,
+            args.flavor,
+            foot_font_size,
+            foot_settings,
+        )
+        generate_wmenu(tokens, source, args.flavor)
     except (
         FileNotFoundError,
         ValueError,

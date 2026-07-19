@@ -128,12 +128,9 @@ static const char *passmgr[] = { "bitwarden-desktop", NULL};
 static const char *browser[] = { "chromium", NULL };
 static const char *termcmd[] = { "foot", NULL };
 static const char *menucmd[] = {
-	"wmenu-run",
-	"-f", "JetBrainsMono Nerd Font 12",
-	"-n", "#000000",  /* SURFACE_00 */
-	"-N", "#4d6654",  /* TEXT_MUTED */
-	"-s", "#050805",  /* SURFACE_01 */
-	"-S", "#39ff14",  /* ACCENT_PRIMARY */
+	"/bin/sh",
+	"-c",
+	"$HOME/.local/bin/deepblack-wmenu",
 	NULL
 };
 static const char *scrnsht[] = {

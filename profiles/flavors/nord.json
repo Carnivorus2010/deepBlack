@@ -32,5 +32,9 @@
     "SYNTAX_PROPERTY": "0x8fbcbbff",
     "SYNTAX_PARAMETER": "0xe5e9f0ff",
     "SYNTAX_PREPROC": "0xb48eadff"
+  },
+  "foot": {
+    "alpha": 0.9,
+    "alpha_mode": "matching"
   }
 }
