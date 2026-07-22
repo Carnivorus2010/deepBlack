@@ -5,32 +5,42 @@ if command -v slstatus >/dev/null 2>&1; then
     exec slstatus -s
 fi
 
-cd /sys/class/power_supply/BAT0
+battery_dir=""
+
+for candidate in /sys/class/power_supply/BAT*; do
+    if [ -d "$candidate" ]; then
+        battery_dir="$candidate"
+        break
+    fi
+done
 
 while :; do
-	if [ -r capacity ]; then
-		battery_capacity=$(cat capacity)
-		battery_status=$(cat status)
+    if [ -n "$battery_dir" ] \
+        && [ -r "$battery_dir/capacity" ] \
+        && [ -r "$battery_dir/status" ]; then
 
-		case "$battery_status" in
-			Charging)
-				battery_icon=" 󰂄"
-				;;
-			Full)
-				battery_icon=" 󰁹"
-				;;
-			*)
-				battery_icon=" 󰁿"
-				;;
-		esac
+        battery_capacity=$(cat "$battery_dir/capacity")
+        battery_status=$(cat "$battery_dir/status")
 
-		printf '%s %s%% | %s\n' \
-			"$battery_icon" \
-			"$battery_capacity" \
-			"$(date '+%a %Y-%m-%d %H:%M')"
-	else
-		date '+%a %Y-%m-%d %H:%M'
-	fi
+        case "$battery_status" in
+            Charging)
+                battery_icon=" 󰂄"
+                ;;
+            Full)
+                battery_icon=" 󰁹"
+                ;;
+            *)
+                battery_icon=" 󰁿"
+                ;;
+        esac
 
-	sleep 30
+        printf '%s %s%% | %s\n' \
+            "$battery_icon" \
+            "$battery_capacity" \
+            "$(date '+%a %Y-%m-%d %H:%M')"
+    else
+        date '+%a %Y-%m-%d %H:%M'
+    fi
+
+    sleep 30
 done
