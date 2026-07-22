@@ -11,77 +11,149 @@ Core compositor, terminal, screenshot, and notification groundwork.
 - Grim/slurp screenshot workflow.
 - Source-built Mako notification integration.
 - wlroots 0.20 migration.
+- Hardened Mako startup through the user service layer.
 
 ### v0.1.4
 
 Tokenized Neovim workflow integration.
 
-- Neovim launched through scripts/editor.sh.
+- Neovim launched through `scripts/editor.sh`.
 - Tokenized Neovim configuration.
-- Telescope, nvim-tree, bufferline, clipboard, and cursor behavior refinements.
+- Telescope, nvim-tree, bufferline, clipboard, and cursor refinements.
 - Caps Lock and Escape swapped at the compositor XKB level.
 
 ### v0.1.5
 
 Tokenized Yazi file manager integration.
 
-- Yazi launched through scripts/files.sh.
+- Yazi launched through `scripts/files.sh`.
 - Tokenized Yazi theme generation.
-- Yazi source configuration under config/yazi/.
-- Yazi install flow through scripts/install-yazi.sh.
-
-### Post-v0.1.5 Documentation Pass
-
-Project documentation was refreshed after the v0.1.5 code/config checkpoint.
-
-- Added Yazi component documentation.
-- Updated Neovim documentation for the current MOD + h / ALT+h launch path.
-- Updated dwl keybind documentation.
-- Added install and dependency notes.
-- Removed outdated references to older file manager and editor launch paths.
+- Yazi source configuration under `config/yazi/`.
+- Yazi install flow through `scripts/install-yazi.sh`.
+- Installation and dependency documentation added.
 
 ### v0.1.6 Login / Session Layer
 
-Implemented, reboot-tested, and token-polished the greetd-based login/session entry point.
+Implemented and reboot-tested the greetd-based session entry point.
 
-- greetd as the login/session manager.
-- tuigreet as the initial console-native greeter.
-- scripts/session.sh as the canonical deepBlack session launcher.
-- scripts/autostart.sh as the deepBlack session background startup helper.
-- scripts/status.sh as the dwl bar status provider.
-- scripts/generate-vt-palette.sh as the virtual terminal palette generator.
-- scripts/apply-vt-palette.sh as the safe VT palette application helper.
-- config/greetd/config.toml as the tracked greetd source template.
-- config/wayland-sessions/deepblack.desktop as the tracked Wayland session entry.
-- config/systemd/greetd.service.d/deepblack-vt-palette.conf as the tracked greetd systemd drop-in template.
-- Manual install path documented before enabling greetd.service.
-- Reboot into greetd/tuigreet on VT1 verified.
-- Login into the full deepBlack dwl session verified.
-- Logout-to-greeter behavior verified.
-- tuigreet ANSI theme roles mapped through the generated deepBlack VT palette.
+- greetd as the login and session manager.
+- tuigreet as the console-native greeter.
+- `scripts/session.sh` as the canonical Wayland session launcher.
+- `scripts/autostart.sh` as the session background-service helper.
+- `scripts/status.sh` as the dwl status provider.
+- Generated virtual-terminal palette support.
+- Managed Wayland session entry.
+- greetd systemd pre-start palette integration.
+- Login, logout, wallpaper, status, and reboot paths verified.
 
-Release intent:
+### v0.1.7 Portability Audit
 
-- This work is tracked as the v0.1.6-pre.1 foundation plus polish work toward the final v0.1.6 checkpoint.
-- Final v0.1.6 should represent the completed login/session layer.
+Validated deepBlack as a profile-driven environment on a second physical machine.
+
+Target system:
+
+    Early 2015 13-inch MacBook Pro Retina
+    Machine profile: silverbullet
+    Flavor profile: nord
+
+Implemented:
+
+- Independent machine and flavor profile selection.
+- `--machine` and `--flavor` build arguments.
+- Generic and SilverBullet machine profiles.
+- deepBlack and Nord flavor profiles.
+- Machine-generated dwl monitor, input, modifier, and font settings.
+- Machine-generated tuigreet wrapper and greeting identity.
+- Flavor-generated Foot, Neovim, Yazi, wmenu, dwl, and VT palette assets.
+- Managed greetd and session installation through `build.sh`.
+- Repository-managed VT palette at `/usr/local/share/deepblack/vtrgb`.
+- Battery status fallback for laptop deployments.
+- SilverBullet Nord GRUB theme.
+- Explicit GRUB theme installer with backup and configuration regeneration.
+- Clean and synchronization workflows that preserve profile arguments.
+- Generated dwl headers removed from version control.
+- Correct Arch dependencies documented: `wlroots0.20`, `fcft`, and `tllist`.
+
+Verified:
+
+- Clean generation from an empty `generated/` directory.
+- SilverBullet/Nord dwl compilation and installation.
+- Command-key compositor modifier.
+- eDP-1 scaling at 1.75.
+- Natural trackpad scrolling.
+- Nord Foot, Neovim, Yazi, wmenu, and tuigreet appearance.
+- Managed VT palette without `/etc/vtrgb`.
+- Generated greeter without the retired local SilverBullet wrapper.
+- Battery percentage and glyph display in the dwl bar.
+- Wallpaper autostart.
+- Login, logout, relog, and reboot behavior.
+- Repository-installed GRUB theme and larger 1280x800 boot interface.
+
+Release preparation remaining:
+
+- Merge the feature branch into `main`.
+- Tag and push the final v0.1.7 checkpoint.
+
+Documentation audit:
+
+- Updated installation and dependency guidance.
+- Documented machine and flavor profile composition.
+- Documented generated and transient file policy.
+- Documented managed greetd, VT palette, and GRUB workflows.
+- Added the missing dwl component document.
 
 ## Next v0.1.x Work
 
+### Additional Machine Profiles
 
-### GUI Fallbacks
+Create explicit profiles for:
 
-Yazi is the primary file manager.
+- the primary desktop workstation
+- the Framework Laptop 13
 
-Thunar may remain an optional GUI fallback for workflows that need a traditional graphical file manager.
+Machine profiles should contain only hardware behavior and machine identity.
+
+### Additional Flavor Profiles
+
+Planned Framework flavor:
+
+    oxocarbon
+
+Flavor profiles should remain independent from hardware profiles.
+
+### Profile Onboarding
+
+Improve documentation and validation for adding a new machine or flavor.
+
+Potential additions:
+
+- profile schema documentation
+- profile validation tests
+- hardware discovery notes
+- battery-device discovery validation tests
+- monitor-profile examples
+
+### Installer Hardening
+
+Continue moving from documented build automation toward a recoverable installer.
+
+Priority areas:
+
+- dependency checks
+- dry-run support
+- clearer privilege boundaries
+- explicit backup and rollback behavior
+- machine onboarding without local one-off files
 
 ## v0.2.0 Direction
 
-Move from core functionality into refinement.
+Move from core functionality and portability into refinement.
 
 Focus areas:
 
-- broader token coverage
-- boot-to-shutdown identity
-- stronger documentation
+- broader semantic token coverage
+- stronger boot-to-shutdown identity
+- more complete machine/flavor composition
 - installer hardening
-- consistency across all user-facing components
+- visual consistency across every user-facing component
+- removal of remaining machine-local assumptions

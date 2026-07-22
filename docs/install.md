@@ -6,6 +6,7 @@ It is not a fully automated installer yet.
 
 The goal is to make a fresh clone understandable and recoverable.
 
+
 ## Repository Layout
 
 Important source directories:
@@ -15,14 +16,21 @@ Important source directories:
     config/nvim/
     config/yazi/
     config/greetd/
+    config/grub/
     config/wayland-sessions/
     config/systemd/
+    profiles/machines/
+    profiles/flavors/
     scripts/
+    tools/
+
+Generated output is written beneath:
+
     generated/
 
-Source configuration is tracked.
+Source configuration and profiles are tracked.
 
-Generated output can be recreated.
+Generated output and transient dwl headers can be recreated and should not be edited by hand.
 
 ## Core Package Groups
 
@@ -36,15 +44,20 @@ Required for building source components.
     ninja
     pkgconf
 
+
 ### Wayland / Compositor Stack
 
-Required for the dwl compositor layer.
+Required for the dwl compositor layer on Arch Linux:
 
     wayland
     wayland-protocols
-    wlroots
+    wlroots0.20
     libinput
     libxkbcommon
+    fcft
+    tllist
+
+The project targets the Arch `wlroots0.20` compatibility package rather than the unversioned `wlroots` package.
 
 Optional XWayland support:
 
@@ -107,13 +120,94 @@ Thunar may be installed as an optional GUI fallback:
 
 This is not the primary file manager path.
 
+
 ### Status Provider
 
 The deepBlack session status helper uses `slstatus -s` when available.
 
-If `slstatus` is not available, it falls back to a simple date/time loop.
+Without `slstatus`, the built-in fallback reports:
+
+- battery percentage and state from the first available `/sys/class/power_supply/BAT*` device
+- current date and time
+- date and time only on systems without the expected battery interface
+
 
 ## Component Install Flow
+
+### Machine and Flavor Profiles
+
+Machine profiles describe hardware-specific behavior:
+
+    profiles/machines/generic.json
+    profiles/machines/silverbullet.json
+
+Current machine-profile responsibilities include:
+
+- monitor names and scaling
+- master-area defaults
+- natural scrolling
+- compositor modifier key
+- Foot font size
+- greeter identity
+
+Flavor profiles describe the visual implementation:
+
+    profiles/flavors/deepblack.json
+    profiles/flavors/nord.json
+
+Current flavor-profile responsibilities include:
+
+- semantic color tokens
+- syntax colors
+- border and state colors
+- Foot opacity behavior
+- generated VT palette behavior
+
+Machine and flavor are selected independently.
+
+Default generic deepBlack build:
+
+    ./build.sh
+
+SilverBullet Nord build:
+
+    ./build.sh --machine silverbullet --flavor nord
+
+The compatibility entry point forwards all arguments to `build.sh`:
+
+    ./sync.sh --machine silverbullet --flavor nord
+
+Environment variables may also provide defaults:
+
+    DEEPBLACK_MACHINE=silverbullet
+    DEEPBLACK_FLAVOR=nord
+
+Explicit command-line arguments take precedence.
+
+### Build Responsibilities
+
+The normal build performs the following work:
+
+1. Generate the selected machine profile.
+2. Generate the selected flavor assets.
+3. Synchronize transient headers into `source/dwl/`.
+4. Install Foot configuration.
+5. Generate and install Neovim configuration.
+6. Generate and install Yazi configuration.
+7. Generate and install the greetd VT palette.
+8. Install the session and greetd integration files.
+9. Build and install dwl.
+
+The build runs `systemctl daemon-reload` after installing the greetd drop-in.
+
+It intentionally does not:
+
+- restart greetd
+- enable greetd
+- modify GRUB
+- reboot the machine
+
+Those actions remain explicit.
 
 ### dwl
 
@@ -121,99 +215,115 @@ Primary source configuration:
 
     source/dwl/config.def.h
 
-After changing dwl configuration, rebuild and reinstall dwl using the project’s normal dwl build workflow.
+Generated build inputs:
 
-Generated build output:
+    generated/dwl/design_tokens.h
+    generated/dwl/machine_profile.h
+
+Transient compile copies:
+
+    source/dwl/design_tokens.h
+    source/dwl/machine_profile.h
+
+The transient copies are ignored by Git and are recreated by the build.
+
+Generated compositor configuration:
 
     source/dwl/config.h
 
-The generated config.h file should not be treated as the source of truth.
+None of these generated files should be treated as source configuration.
+
+Remove generated assets and transient headers with:
+
+    ./clean.sh
+
+Recreate them through the selected build:
+
+    ./sync.sh --machine silverbullet --flavor nord
 
 ### Login / Session Startup
 
-Source session launcher:
+Source session files:
 
     scripts/session.sh
-
-Source session helpers:
-
     scripts/autostart.sh
     scripts/status.sh
-
-Source virtual terminal palette helpers:
-
-    scripts/generate-vt-palette.sh
     scripts/apply-vt-palette.sh
-
-Source greetd configuration:
-
+    scripts/generate-vt-palette.sh
     config/greetd/config.toml
-
-Source Wayland session entry:
-
     config/wayland-sessions/deepblack.desktop
-
-Source systemd drop-in:
-
     config/systemd/greetd.service.d/deepblack-vt-palette.conf
 
-Expected system install paths:
+The machine generator writes:
+
+    generated/greetd/deepblack-greeter
+
+The flavor pipeline writes:
+
+    generated/greetd/vtrgb
+
+Expected installed paths:
 
     /usr/local/bin/deepblack-session
     /usr/local/bin/deepblack-autostart
     /usr/local/bin/deepblack-status
+    /usr/local/bin/deepblack-greeter
     /usr/local/bin/deepblack-apply-vt-palette
     /usr/local/share/deepblack/vtrgb
     /etc/greetd/config.toml
     /usr/share/wayland-sessions/deepblack.desktop
     /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
 
-Manual install commands:
-
-    scripts/generate-vt-palette.sh
-    sudo install -Dm755 scripts/session.sh /usr/local/bin/deepblack-session
-    sudo install -Dm755 scripts/autostart.sh /usr/local/bin/deepblack-autostart
-    sudo install -Dm755 scripts/status.sh /usr/local/bin/deepblack-status
-    sudo install -Dm755 scripts/apply-vt-palette.sh /usr/local/bin/deepblack-apply-vt-palette
-    sudo install -Dm644 generated/greetd/vtrgb /usr/local/share/deepblack/vtrgb
-    sudo install -Dm644 config/greetd/config.toml /etc/greetd/config.toml
-    sudo install -Dm644 config/wayland-sessions/deepblack.desktop /usr/share/wayland-sessions/deepblack.desktop
-    sudo install -Dm644 config/systemd/greetd.service.d/deepblack-vt-palette.conf /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
-    sudo systemctl daemon-reload
-
 The intended session flow is:
 
-    greetd
-        -> tuigreet
+    greetd.service
+        -> deepblack-apply-vt-palette
+        -> greetd
+        -> deepblack-greeter
         -> deepblack-session
         -> deepblack-status | dwl -s deepblack-autostart
 
-Virtual terminal palette flow:
+The active greeter uses `/usr/local/share/deepblack/vtrgb` through the systemd pre-start helper.
 
-    generated/dwl/design_tokens.h
-        -> scripts/generate-vt-palette.sh
-        -> generated/greetd/vtrgb
-        -> /usr/local/share/deepblack/vtrgb
-        -> setvtrgb
-        -> tuigreet ANSI theme roles
+Machine-local `/etc/vtrgb` handling is not part of the managed session path.
 
-Session helper responsibilities:
-
-    deepblack-session            prepares the Wayland session and launches dwl
-    deepblack-autostart          starts session background services such as wallpaper
-    deepblack-status             writes status text to dwl through stdin
-    deepblack-apply-vt-palette   applies the generated VT palette before greetd starts
-
-Do not enable greetd.service until the session has been installed and tested manually.
-
-Before enabling greetd.service, confirm that:
+Before enabling or restarting greetd, confirm these files exist and are executable:
 
     /usr/local/bin/deepblack-session
-    /usr/local/bin/deepblack-autostart
-    /usr/local/bin/deepblack-status
+    /usr/local/bin/deepblack-greeter
     /usr/local/bin/deepblack-apply-vt-palette
 
-exist, are executable, and work from a temporary greetd start test.
+Keep a fallback TTY available while testing login changes.
+
+### GRUB Theme
+
+The tested SilverBullet Nord GRUB source is tracked at:
+
+    config/grub/themes/silverbullet-nord/theme.txt
+
+Install it explicitly with:
+
+    ./scripts/install-grub-theme.sh
+
+The installer:
+
+- validates the requested theme
+- creates `/etc/default/grub.deepblack-backup` if absent
+- installs the theme under `/boot/grub/themes/`
+- installs the required GRUB font
+- sets `GRUB_THEME`
+- sets `GRUB_GFXMODE`
+- regenerates `/boot/grub/grub.cfg`
+
+The default graphics mode is:
+
+    1280x800,auto
+
+Override it for another display with:
+
+    DEEPBLACK_GRUB_GFXMODE=1920x1080,auto ./scripts/install-grub-theme.sh
+
+GRUB installation remains separate from `build.sh` because bootloader changes should be deliberate.
 
 ### Neovim
 
@@ -234,7 +344,7 @@ Token flow:
 
 Launch keybind:
 
-    MOD + h / ALT+h
+    MOD + h
 
 ### Yazi
 
@@ -255,7 +365,7 @@ Token flow:
 
 Launch keybind:
 
-    MOD + e / ALT+e
+    MOD + e
 
 ### Screenshots
 
@@ -270,41 +380,47 @@ Runtime tools:
 
 Launch keybind:
 
-    MOD + s / ALT+s
+    MOD + s
 
 ## Fresh Clone Checklist
 
 After cloning the repository:
 
-1. Install required system packages.
-2. Build and install dwl.
-3. Build vendored Mako if needed.
-4. Install and verify the login/session layer:
+1. Install the required Arch packages.
+2. Select the intended machine and flavor profiles.
+3. Run the complete build.
 
-       scripts/session.sh
-       scripts/autostart.sh
-       scripts/status.sh
-       scripts/generate-vt-palette.sh
-       scripts/apply-vt-palette.sh
-       config/greetd/config.toml
-       config/wayland-sessions/deepblack.desktop
-       config/systemd/greetd.service.d/deepblack-vt-palette.conf
+Generic deepBlack:
 
-5. Run Neovim install script:
+    ./build.sh
 
-       scripts/install-nvim.sh
+SilverBullet Nord:
 
-6. Run Yazi install script:
+    ./build.sh --machine silverbullet --flavor nord
 
-       scripts/install-yazi.sh
+4. Verify the installed session files before enabling or restarting greetd.
+5. Test login and logout behavior with a fallback TTY available.
+6. Install a GRUB theme separately when required:
 
-7. Verify launch keybinds:
+       ./scripts/install-grub-theme.sh
 
-       ALT + Return  terminal
-       ALT + d       launcher
-       ALT + h       Neovim
-       ALT + e       Yazi
-       ALT + s       screenshot
+7. Build and configure the vendored Mako daemon when needed.
+8. Verify the primary launch keybinds for the selected machine profile.
+
+Common actions:
+
+    MOD + Return  terminal
+    MOD + d       launcher
+    MOD + h       Neovim
+    MOD + e       Yazi
+    MOD + s       screenshot
+
+The actual modifier is supplied by the machine profile.
+
+For example:
+
+    generic       -> ALT
+    silverbullet  -> LOGO / Command
 
 ## Generated Files
 
@@ -313,9 +429,27 @@ Generated files should not be edited by hand.
 Important generated paths:
 
     generated/dwl/design_tokens.h
-    generated/nvim/
-    generated/yazi/theme.toml
+    generated/dwl/machine_profile.h
+    generated/foot/foot.ini
+    generated/greetd/deepblack-greeter
     generated/greetd/vtrgb
+    generated/machine/foot-font-size
+    generated/nvim/
+    generated/wmenu/
+    generated/yazi/theme.toml
+
+Transient dwl compile inputs:
+
+    source/dwl/design_tokens.h
+    source/dwl/machine_profile.h
     source/dwl/config.h
 
-When generated output looks out of date, rerun the relevant generator or install script.
+`generated/` and the transient headers are excluded from version control.
+
+Clean them with:
+
+    ./clean.sh
+
+Regenerate them with an explicit profile selection:
+
+    ./sync.sh --machine silverbullet --flavor nord

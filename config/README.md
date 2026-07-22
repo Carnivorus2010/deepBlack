@@ -2,42 +2,78 @@
 
 Configuration sources for user-facing deepBlack components.
 
-These files are source configuration, not generated output.
+These files are tracked source configuration rather than generated output.
 
-### greetd
+## greetd
 
-`config/greetd/config.toml` is the tracked source template for the deepBlack greetd
-login/session configuration.
+`config/greetd/config.toml` is the tracked source configuration for greetd.
 
-It is intended to be installed to:
+Installed path:
 
     /etc/greetd/config.toml
 
-This file should launch the installed deepBlack session command rather than a user-local
-repository path.
+The active configuration launches:
 
-### Wayland Sessions
+    /usr/local/bin/deepblack-greeter
+
+The greeter wrapper itself is generated from the selected machine profile:
+
+    profiles/machines/<machine>.json
+        -> tools/generate-machine-profile.py
+        -> generated/greetd/deepblack-greeter
+        -> /usr/local/bin/deepblack-greeter
+
+The greetd configuration must not embed a repository-local path or a machine-specific local wrapper.
+
+## GRUB
+
+Tracked GRUB theme source:
+
+    config/grub/themes/silverbullet-nord/theme.txt
+
+Install it explicitly with:
+
+    scripts/install-grub-theme.sh
+
+The source theme is installed beneath:
+
+    /boot/grub/themes/silverbullet-nord/
+
+GRUB installation remains separate from the normal build because bootloader modification should be deliberate.
+
+## Wayland Sessions
 
 `config/wayland-sessions/deepblack.desktop` defines the deepBlack Wayland session entry.
 
-It is intended to be installed to:
+Installed path:
 
     /usr/share/wayland-sessions/deepblack.desktop
 
-### systemd
+The session entry launches:
 
-`config/systemd/greetd.service.d/deepblack-vt-palette.conf` is the tracked source template
-for the greetd systemd drop-in.
+    /usr/local/bin/deepblack-session
 
-It is intended to be installed to:
+## systemd
+
+`config/systemd/greetd.service.d/deepblack-vt-palette.conf` is the tracked greetd service drop-in.
+
+Installed path:
 
     /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
 
-The drop-in applies the deepBlack virtual terminal palette before greetd starts.
+The drop-in runs:
+
+    /usr/local/bin/deepblack-apply-vt-palette
+
+before greetd starts.
+
+The applied palette is read from:
+
+    /usr/local/share/deepblack/vtrgb
 
 ## Neovim
 
-Neovim is the primary text editor component for deepBlack.
+Neovim is the primary text editor component.
 
 Source configuration:
 
@@ -49,7 +85,7 @@ Installed by:
 
 Launch keybind:
 
-    MOD + h / ALT+h
+    MOD + h
 
 Design role:
 
@@ -57,14 +93,13 @@ Design role:
 - Material: MATERIAL_BASE through Foot
 - Typography: TYPE_DIAGNOSTIC / TYPE_BODY depending on content
 - Motion: MOTION_INSTANT for text input
-- Color: generated from generated/dwl/design_tokens.h
+- Color: generated from `generated/dwl/design_tokens.h`
 
-ACCENT_PRIMARY is reserved for cursor emphasis, current line number, selections,
-and active syntax states. It should not become decoration.
+`ACCENT_PRIMARY` is reserved for cursor emphasis, selections, current-line information, and active syntax states.
 
 ## Yazi
 
-Yazi is the primary file manager component for deepBlack.
+Yazi is the primary file manager component.
 
 Source configuration:
 
@@ -76,7 +111,7 @@ Installed by:
 
 Launch keybind:
 
-    MOD + e / ALT+e
+    MOD + e
 
 Design role:
 
@@ -84,9 +119,9 @@ Design role:
 - Material: MATERIAL_BASE through Foot
 - Typography: TYPE_DIAGNOSTIC / TYPE_BODY depending on content
 - Motion: MOTION_INSTANT for navigation and selection
-- Color: generated from generated/dwl/design_tokens.h
+- Color: generated from `generated/dwl/design_tokens.h`
 
-The generated Yazi theme is written to:
+Generated Yazi theme:
 
     generated/yazi/theme.toml
 

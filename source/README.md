@@ -21,6 +21,16 @@ Primary source configuration:
 
     source/dwl/config.def.h
 
+Machine-specific build input is generated from:
+
+    profiles/machines/
+
+Flavor-specific design tokens are generated from:
+
+    profiles/flavors/
+
+Generated headers are copied into `source/dwl/` only for compilation and are not tracked.
+
 ### mako
 
 Vendored notification daemon source.
