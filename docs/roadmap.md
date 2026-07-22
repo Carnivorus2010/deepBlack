@@ -89,10 +89,12 @@ Verified:
 - Login, logout, relog, and reboot behavior.
 - Repository-installed GRUB theme and larger 1280x800 boot interface.
 
-Release preparation remaining:
+Release checkpoint:
 
-- Merge the feature branch into `main`.
-- Tag and push the final v0.1.7 checkpoint.
+- Documentation audit completed.
+- Final repository validation passed.
+- Feature branch fast-forwarded into `main`.
+- This milestone represents the final v0.1.7 release state.
 
 Documentation audit:
 

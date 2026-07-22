@@ -8,15 +8,11 @@ It is a source-driven operating environment built around dwl, Foot, machine prof
 
 ## Current Release
 
-Current tagged checkpoint:
+Current release:
 
-    v0.1.6
+    v0.1.7
 
-Current development milestone:
-
-    v0.1.7 portability audit
-
-v0.1.7 is validating deepBlack as a reproducible environment across different hardware rather than as a single-machine configuration.
+v0.1.7 completes the first cross-hardware portability audit and establishes deepBlack as a machine-profile and flavor-profile driven operating environment.
 
 ## Profile Model
 
