@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shlex
 from pathlib import Path
 from typing import Any
 
@@ -13,6 +14,7 @@ PROFILES_DIR = ROOT / "profiles" / "machines"
 
 OUT_HEADER = ROOT / "generated" / "dwl" / "machine_profile.h"
 OUT_FOOT_SIZE = ROOT / "generated" / "machine" / "foot-font-size"
+OUT_GREETER = ROOT / "generated" / "greetd" / "deepblack-greeter"
 
 MODKEYS = {
     "ALT": "WLR_MODIFIER_ALT",
@@ -77,6 +79,11 @@ def load_profile(machine: str) -> dict[str, Any]:
 
     if not isinstance(profile.get("natural_scrolling"), bool):
         raise ValueError("natural_scrolling must be true or false")
+
+    greeting = profile.get("greeter_greeting")
+
+    if not isinstance(greeting, str) or not greeting.strip():
+        raise ValueError("greeter_greeting must be a non-empty string")
 
     return profile
 
@@ -148,6 +155,36 @@ def generate_foot_size(profile: dict[str, Any]) -> None:
     )
 
 
+def generate_greeter(profile: dict[str, Any]) -> None:
+    greeting = shlex.quote(profile["greeter_greeting"])
+
+    lines = [
+        "#!/bin/sh",
+        "set -eu",
+        "",
+        "# Auto-generated from the selected deepBlack machine profile.",
+        f"# Machine: {profile['id']}",
+        "# Do not edit by hand.",
+        "",
+        "exec tuigreet \\",
+        f"    --greeting {greeting} \\",
+        "    --time \\",
+        "    --remember \\",
+        "    --remember-session \\",
+        "    --asterisks \\",
+        "    --user-menu \\",
+        "    --cmd /usr/local/bin/deepblack-session \\",
+        "    --sessions /usr/share/wayland-sessions \\",
+        "    --xsessions /usr/share/xsessions \\",
+        "    --theme 'text=white;time=darkgray;container=black;border=cyan;title=cyan;greet=cyan;prompt=blue;input=white;action=darkgray;button=blue'",
+        "",
+    ]
+
+    OUT_GREETER.parent.mkdir(parents=True, exist_ok=True)
+    OUT_GREETER.write_text("\n".join(lines), encoding="utf-8")
+    OUT_GREETER.chmod(0o755)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -161,12 +198,14 @@ def main() -> int:
         profile = load_profile(args.machine)
         generate_header(profile)
         generate_foot_size(profile)
+        generate_greeter(profile)
     except (FileNotFoundError, ValueError, json.JSONDecodeError) as error:
         parser.error(str(error))
 
     print(f"[deepBlack] selected machine profile: {profile['id']}")
     print(f"[deepBlack] generated {OUT_HEADER}")
     print(f"[deepBlack] generated {OUT_FOOT_SIZE}")
+    print(f"[deepBlack] generated {OUT_GREETER}")
 
     return 0
 

@@ -1,6 +1,7 @@
 {
   "id": "generic",
   "description": "Portable deepBlack defaults for unknown hardware",
+  "greeter_greeting": "deepBlack",
   "foot_font_size": 12,
   "natural_scrolling": false,
   "modkey": "ALT",

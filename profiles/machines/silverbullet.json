@@ -1,6 +1,7 @@
 {
   "id": "silverbullet",
   "description": "Early 2015 13-inch MacBook Pro Retina",
+  "greeter_greeting": "SilverBullet",
   "foot_font_size": 15,
   "natural_scrolling": true,
   "modkey": "LOGO",

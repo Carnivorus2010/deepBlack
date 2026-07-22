@@ -1,0 +1,51 @@
+# SilverBullet Nord GRUB theme
+
+desktop-color: "#2E3440"
+message-font: "DejaVu Sans Regular 16"
+message-color: "#D8DEE9"
+message-bg-color: "#2E3440"
+terminal-font: "DejaVu Sans Regular 16"
+terminal-border: "0"
+
++ label {
+    top = 8%
+    left = 10%
+    width = 80%
+    height = 40
+    text = "SILVERBULLET // NORD"
+    align = "left"
+    font = "DejaVu Sans Regular 16"
+    color = "#88C0D0"
+}
+
++ boot_menu {
+    left = 10%
+    width = 80%
+    top = 25%
+    height = 45%
+    item_font = "DejaVu Sans Regular 16"
+    item_color = "#D8DEE9"
+    selected_item_font = "DejaVu Sans Regular 16"
+    selected_item_color = "#88C0D0"
+    icon_height = 0
+    icon_width = 0
+    item_height = 42
+    item_padding = 6
+    item_icon_space = 0
+    item_spacing = 2
+    scrollbar = false
+}
+
++ progress_bar {
+    id = "__timeout__"
+    left = 15%
+    top = 80%
+    height = 28
+    width = 70%
+    font = "DejaVu Sans Regular 16"
+    text_color = "#ECEFF4"
+    fg_color = "#88C0D0"
+    bg_color = "#3B4252"
+    border_color = "#5E81AC"
+    text = "@TIMEOUT_NOTIFICATION_LONG@"
+}

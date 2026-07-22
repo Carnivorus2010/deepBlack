@@ -117,6 +117,42 @@ sudo install -Dm644 \
   "$GENERATED_DIR/greetd/vtrgb" \
   "/usr/local/share/deepblack/vtrgb"
 
+step "Installing session layer"
+sudo install -Dm755 \
+  "$ROOT/scripts/session.sh" \
+  "/usr/local/bin/deepblack-session"
+
+sudo install -Dm755 \
+  "$ROOT/scripts/autostart.sh" \
+  "/usr/local/bin/deepblack-autostart"
+
+sudo install -Dm755 \
+  "$ROOT/scripts/status.sh" \
+  "/usr/local/bin/deepblack-status"
+
+sudo install -Dm644 \
+  "$ROOT/config/wayland-sessions/deepblack.desktop" \
+  "/usr/share/wayland-sessions/deepblack.desktop"
+
+step "Installing greetd integration"
+sudo install -Dm755 \
+  "$ROOT/scripts/apply-vt-palette.sh" \
+  "/usr/local/bin/deepblack-apply-vt-palette"
+
+sudo install -Dm755 \
+  "$GENERATED_DIR/greetd/deepblack-greeter" \
+  "/usr/local/bin/deepblack-greeter"
+
+sudo install -Dm644 \
+  "$ROOT/config/greetd/config.toml" \
+  "/etc/greetd/config.toml"
+
+sudo install -Dm644 \
+  "$ROOT/config/systemd/greetd.service.d/deepblack-vt-palette.conf" \
+  "/etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf"
+
+sudo systemctl daemon-reload
+
 step "Building dwl for machine: $MACHINE, flavor: $FLAVOR"
 cd "$DWL_DIR"
 rm -f config.h
