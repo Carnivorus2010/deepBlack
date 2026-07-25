@@ -123,7 +123,6 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-/* commands */
 static const char *passmgr[] = { "bitwarden-desktop", NULL};
 static const char *browser[] = { "chromium", NULL };
 static const char *termcmd[] = { "foot", NULL };
@@ -136,19 +135,25 @@ static const char *menucmd[] = {
 static const char *scrnsht[] = {
 	"/bin/sh",
 	"-c",
-	"$HOME/Projects/deepBlack/scripts/screenshot.sh",
+	"$HOME/.local/bin/deepblack-screenshot",
 	NULL
 };
 static const char *editor [] = {
 	"/bin/sh",
 	"-c",
-	"$HOME/Projects/deepBlack/scripts/editor.sh",
+	"$HOME/.local/bin/deepblack-editor",
 	NULL
 };
 static const char *filemgr[] = {
 	"/bin/sh",
 	"-c",
-	"$HOME/Projects/deepBlack/scripts/files.sh",
+	"$HOME/.local/bin/deepblack-files",
+	NULL
+};
+static const char *filemgr_gui[] = {
+	"/bin/sh",
+	"-c",
+	"$HOME/.local/bin/deepblack-files-gui",
 	NULL
 };
 
@@ -157,6 +162,7 @@ static const Key keys[] = {
 	/* modifier                  key                  function          argument */
 	{ MODKEY,                    XKB_KEY_s,           spawn,            {.v = scrnsht} },
 	{ MODKEY,                    XKB_KEY_e,           spawn,            {.v = filemgr} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_e,           spawn,            {.v = filemgr_gui} },
 	{ MODKEY,                    XKB_KEY_h,           spawn,            {.v = editor} },
 	{ MODKEY,                    XKB_KEY_n,           spawn,            {.v = passmgr} },
 	{ MODKEY,                    XKB_KEY_b,           spawn,            {.v = browser} },
@@ -177,7 +183,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_m,           setlayout,        {.v = &layouts[2]} },
 	{ MODKEY,                    XKB_KEY_space,       setlayout,        {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,       togglefloating,   {0} },
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_e,           togglefullscreen, {0} },
+	{ MODKEY|WLR_MODIFIER_CTRL,   XKB_KEY_e,           togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,           view,             {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_parenright,  tag,              {.ui = ~0} },
 	{ MODKEY,                    XKB_KEY_comma,       focusmon,         {.i = WLR_DIRECTION_LEFT} },

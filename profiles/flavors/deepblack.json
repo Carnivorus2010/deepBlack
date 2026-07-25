@@ -36,5 +36,9 @@
   "foot": {
     "alpha": 1.0,
     "alpha_mode": "matching"
+  },
+  "wallpaper": {
+    "asset": "deepblack.png",
+    "mode": "fill"
   }
 }

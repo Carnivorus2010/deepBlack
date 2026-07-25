@@ -12,6 +12,7 @@ source/mako/build/
 *.orig
 *.rej
 
+/source/mako/include/deepblack_tokens.h
 /source/dwl/machine_profile.h
 
 # Python bytecode

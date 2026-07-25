@@ -36,5 +36,8 @@
   "foot": {
     "alpha": 0.9,
     "alpha_mode": "matching"
+  },
+   "wallpaper": {
+    "mode": "fill"
   }
 }

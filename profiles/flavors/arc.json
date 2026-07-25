@@ -1,0 +1,49 @@
+{
+  "id": "arc",
+  "description": "Cold electrical engineering and high-energy systems environment",
+  "tokens": {
+    "SURFACE_00": "0x05070bff",
+    "SURFACE_01": "0x090e15ff",
+    "SURFACE_02": "0x0f1722ff",
+    "TEXT_PRIMARY": "0xe6f1ffff",
+    "TEXT_SECONDARY": "0x9fb3c8ff",
+    "TEXT_MUTED": "0x5f7388ff",
+    "ACCENT_PRIMARY": "0x38bdf8ff",
+    "ACCENT_SECONDARY": "0x2563ebff",
+    "ACCENT_DIAGNOSTIC": "0x67e8f9ff",
+    "STATE_WARNING": "0xf0b94dff",
+    "STATE_CRITICAL": "0xff4d6dff",
+    "BORDER_INACTIVE": "0x1b3045ff",
+    "BORDER_ACTIVE": "ACCENT_PRIMARY",
+    "BORDER_CRITICAL": "STATE_CRITICAL",
+    "SURFACE_03": "0x162131ff",
+    "SURFACE_04": "0x1e2c3fff",
+    "STATE_SUCCESS": "0x4ade80ff",
+    "SYNTAX_COMMENT": "0x52677fff",
+    "SYNTAX_KEYWORD": "0xc084fcff",
+    "SYNTAX_FUNCTION": "0x67e8f9ff",
+    "SYNTAX_STRING": "0x86efacff",
+    "SYNTAX_NUMBER": "0xf0b94dff",
+    "SYNTAX_TYPE": "0x93c5fdff",
+    "SYNTAX_CONSTANT": "0xfb7185ff",
+    "SYNTAX_OPERATOR": "0xa5b4fcff",
+    "SYNTAX_SPECIAL": "0xf472b6ff",
+    "SYNTAX_VARIABLE": "0xe6f1ffff",
+    "SYNTAX_PROPERTY": "0x60a5faff",
+    "SYNTAX_PARAMETER": "0xc4b5fdff",
+    "SYNTAX_PREPROC": "0xd8b4feff"
+  },
+  "foot": {
+    "alpha": 0.90,
+    "alpha_mode": "matching"
+  },
+  "gtk": {
+    "theme": "Arc-Darkest",
+    "icon_theme": "Adwaita",
+    "font": "JetBrainsMono Nerd Font 10"
+  },
+  "wallpaper": {
+    "asset":"arc.png",
+    "mode": "fill"
+  }
+}

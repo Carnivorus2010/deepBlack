@@ -3,7 +3,7 @@
 # deepBlack notification daemon launcher
 # Runs the source-tokenized Mako build from the deepBlack repository.
 
-MAKO_BIN="$HOME/Projects/deepBlack/source/mako/build/mako"
+MAKO_BIN="${DEEPBLACK_MAKO_BIN:-$HOME/.local/libexec/deepblack/mako}"
 LOG_DIR="$HOME/.local/state/deepBlack"
 LOG_FILE="$LOG_DIR/mako.log"
 
