@@ -1,0 +1,49 @@
+{
+  "id": "carbon",
+  "description": "Graphite-inspired precision environment with matte charcoal surfaces and metallic interaction light",
+  "tokens": {
+    "SURFACE_00": "0x0b0c0eff",
+    "SURFACE_01": "0x121416ff",
+    "SURFACE_02": "0x1a1d20ff",
+    "TEXT_PRIMARY": "0xe9ecefff",
+    "TEXT_SECONDARY": "0xb5bac0ff",
+    "TEXT_MUTED": "0x6c7279ff",
+    "ACCENT_PRIMARY": "0xc7cdd3ff",
+    "ACCENT_SECONDARY": "0x8d959dff",
+    "ACCENT_DIAGNOSTIC": "0xe2e6eaff",
+    "STATE_WARNING": "0xc8a56aff",
+    "STATE_CRITICAL": "0xd06b74ff",
+    "BORDER_INACTIVE": "0x30353aff",
+    "BORDER_ACTIVE": "ACCENT_PRIMARY",
+    "BORDER_CRITICAL": "STATE_CRITICAL",
+    "SURFACE_03": "0x24282cff",
+    "SURFACE_04": "0x30353aff",
+    "STATE_SUCCESS": "0x87ad91ff",
+    "SYNTAX_COMMENT": "0x666d74ff",
+    "SYNTAX_KEYWORD": "0xb3a1c7ff",
+    "SYNTAX_FUNCTION": "0x8fadbfff",
+    "SYNTAX_STRING": "0x91ac92ff",
+    "SYNTAX_NUMBER": "0xc2a36fff",
+    "SYNTAX_TYPE": "0x9eafbbff",
+    "SYNTAX_CONSTANT": "0xbd9299ff",
+    "SYNTAX_OPERATOR": "0xa9afb5ff",
+    "SYNTAX_SPECIAL": "0xc0a6c8ff",
+    "SYNTAX_VARIABLE": "0xe9ecefff",
+    "SYNTAX_PROPERTY": "0x9daeb8ff",
+    "SYNTAX_PARAMETER": "0xbfc5cbff",
+    "SYNTAX_PREPROC": "0xb3a1c7ff"
+  },
+  "foot": {
+    "alpha": 0.88,
+    "alpha_mode": "matching"
+  },
+  "gtk": {
+    "theme": "Arc-Darkest",
+    "icon_theme": "Adwaita",
+    "font": "JetBrainsMono Nerd Font 10"
+  },
+  "wallpaper": {
+    "asset": "carbon.png",
+    "mode": "fill"
+  }
+}
