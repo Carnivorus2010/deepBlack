@@ -12,14 +12,40 @@ LOG_FILE="$LOG_DIR/swaybg.log"
 
 mkdir -p "$LOG_DIR"
 
-# Bind session services to the current Wayland environment.
-if command -v systemctl >/dev/null 2>&1; then
-    systemctl --user import-environment \
-        WAYLAND_DISPLAY \
-        XDG_RUNTIME_DIR \
-        DBUS_SESSION_BUS_ADDRESS
+# Bind managed user services to the current graphical session.
+INIT_BACKEND_LIB="$HOME/.local/libexec/deepblack/init-backend.sh"
 
-    systemctl --user restart deepblack-mako.service
+if [ -r "$INIT_BACKEND_LIB" ]; then
+    # Source the installed backend-neutral service helpers.
+    # shellcheck disable=SC1090
+    . "$INIT_BACKEND_LIB"
+
+        if INIT_BACKEND="$(deepblack_detect_user_backend)"; then
+        if deepblack_import_session_environment "$INIT_BACKEND"; then
+            deepblack_start_or_restart_user_service \
+                deepblack-mako \
+                "$INIT_BACKEND" || {
+                    printf \
+                        'deepBlack: failed to start Mako through %s\n' \
+                        "$INIT_BACKEND" \
+                        >&2
+                }
+        else
+            printf \
+                'deepBlack: failed to import the session environment through %s\n' \
+                "$INIT_BACKEND" \
+                >&2
+        fi
+    else
+        printf \
+            'deepBlack: no supported user-service backend is active\n' \
+            >&2
+    fi
+else
+    printf \
+        'deepBlack: init backend library is not installed: %s\n' \
+        "$INIT_BACKEND_LIB" \
+        >&2
 fi
 
 COLOR="000000"

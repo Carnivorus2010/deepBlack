@@ -194,6 +194,11 @@ install -Dm755 \
   "$ROOT/scripts/deepblack-mako.sh" \
   "$LOCAL_BIN/deepblack-mako"
 
+step "Installing init backend library"
+install -Dm755 \
+  "$ROOT/scripts/init-backend.sh" \
+  "$LOCAL_LIBEXEC/init-backend.sh"
+
 step "Installing Mako user service"
 install -Dm644 \
   "$ROOT/config/systemd/user/deepblack-mako.service" \
