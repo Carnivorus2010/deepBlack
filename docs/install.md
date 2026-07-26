@@ -26,7 +26,23 @@ Important source directories:
 
 Generated output is written beneath:
 
-    generated/
+    generated/dwl/design_tokens.h
+    generated/dwl/machine_profile.h
+    generated/mako/deepblack_tokens.h
+    generated/foot/foot.ini
+    generated/wmenu/deepblack-wmenu
+    generated/gtk-3.0/settings.ini
+    generated/gtk-3.0/gtk.css
+    generated/wallpaper/background-color
+    generated/wallpaper/mode
+    generated/wallpaper/wallpaper
+    generated/grub/theme.txt
+    generated/grub/theme-name
+    generated/grub/gfxmode
+    generated/greetd/deepblack-greeter
+    generated/greetd/vtrgb
+    generated/nvim/
+    generated/yazi/theme.toml
 
 Source configuration and profiles are tracked.
 
@@ -76,6 +92,24 @@ Required for the current deepBlack workflow.
     yazi
     chromium
     bitwarden-desktop
+
+The build installs the following runtime paths.
+
+    ~/.local/bin/deepblack-wmenu
+    ~/.local/bin/deepblack-editor
+    ~/.local/bin/deepblack-screenshot
+    ~/.local/bin/deepblack-files
+    ~/.local/bin/deepblack-files-gui
+    ~/.local/bin/deepblack-mako
+    ~/.local/bin/deepblack-makoctl
+    ~/.local/libexec/deepblack/mako
+    ~/.config/systemd/user/deepblack-mako.service
+    ~/.local/share/deepblack/wallpaper
+    ~/.local/share/deepblack/background-color
+    ~/.local/share/deepblack/wallpaper-mode
+
+The `wallpaper` image path is present only when the selected flavor provides
+an image asset. Solid-color flavors use the generated background color instead.
 
 ### Login Packages
 
@@ -154,6 +188,8 @@ Flavor profiles describe the visual implementation:
 
     profiles/flavors/deepblack.json
     profiles/flavors/nord.json
+    profiles/flavors/arc.json
+    profiles/flavors/carbon.json
 
 Current flavor-profile responsibilities include:
 
@@ -297,33 +333,28 @@ Keep a fallback TTY available while testing login changes.
 
 ### GRUB Theme
 
-The tested SilverBullet Nord GRUB source is tracked at:
+The selected machine and flavor profiles are composed into:
 
-    config/grub/themes/silverbullet-nord/theme.txt
+    generated/grub/theme.txt
+    generated/grub/theme-name
+    generated/grub/gfxmode
 
-Install it explicitly with:
+Validate without installing:
 
-    ./scripts/install-grub-theme.sh
+    ./scripts/install-grub-theme.sh \
+      --machine generic \
+      --flavor arc \
+      --dry-run
 
-The installer:
+Install explicitly:
 
-- validates the requested theme
-- creates `/etc/default/grub.deepblack-backup` if absent
-- installs the theme under `/boot/grub/themes/`
-- installs the required GRUB font
-- sets `GRUB_THEME`
-- sets `GRUB_GFXMODE`
-- regenerates `/boot/grub/grub.cfg`
+    ./scripts/install-grub-theme.sh \
+      --machine generic \
+      --flavor arc
 
-The default graphics mode is:
-
-    1280x800,auto
-
-Override it for another display with:
-
-    DEEPBLACK_GRUB_GFXMODE=1920x1080,auto ./scripts/install-grub-theme.sh
-
-GRUB installation remains separate from `build.sh` because bootloader changes should be deliberate.
+The installer creates timestamped backups, generates and validates a candidate
+`grub.cfg`, confirms the selected theme reference, and rolls back system changes
+when installation fails.
 
 ### Neovim
 

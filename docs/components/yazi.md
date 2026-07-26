@@ -10,14 +10,20 @@ Yazi is treated as a first-class work surface, not an external themed applicatio
 
 ## Launch Path
 
-MOD + e / ALT+e launches the file manager workflow.
+MOD + e / ALT+e launches the Yazi file manager workflow.
+
+MOD + Shift + e launches the optional GUI fallback, Thunar.
 
 Launch flow:
 
     source/dwl/config.def.h
-        -> scripts/files.sh
-        -> foot --app-id deepblack-files
-        -> yazi
+        -> ~/.local/bin/deepblack-files
+        -> Foot
+        -> Yazi
+
+    source/dwl/config.def.h
+        -> ~/.local/bin/deepblack-files-gui
+        -> Thunar
 
 The launcher lives at:
 

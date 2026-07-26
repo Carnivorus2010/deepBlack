@@ -51,8 +51,8 @@ The generated file should not be edited by hand.
 Foot is used for:
 
 - the primary terminal
-- Neovim through `scripts/editor.sh`
-- Yazi through `scripts/files.sh`
+- Neovim through `~/.local/bin/deepblack-editor`
+- Yazi through `~/.local/bin/deepblack-files`
 - other terminal-native project workflows
 
 The compositor launches the primary terminal with:

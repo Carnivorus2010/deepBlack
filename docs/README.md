@@ -27,12 +27,17 @@ Hardware behavior is defined beneath:
 
 Visual implementation is defined beneath:
 
-    profiles/flavors/
+    profiles/flavors/deepblack.json
+    profiles/flavors/nord.json
+    profiles/flavors/arc.json
+    profiles/flavors/carbon.json
 
 Machine and flavor profiles are selected independently during the build.
 
 Example:
 
     ./build.sh --machine silverbullet --flavor nord
+    ./build.sh --machine generic --flavor arc
+    ./build.sh --machine silverbullet --flavor carbon
 
 Generated output is reproducible and should not be edited by hand.

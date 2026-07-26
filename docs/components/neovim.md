@@ -22,9 +22,9 @@ MOD + h / ALT+h launches the editor workflow.
 Launch flow:
 
     source/dwl/config.def.h
-        -> scripts/editor.sh
-        -> foot --app-id deepblack-editor
-        -> nvim
+      -> ~/.local/bin/deepblack-editor
+      -> Foot
+      -> Neovim
 
 The launcher opens Foot with app id deepblack-editor, title deepBlack :: editor, and starts nvim.
 

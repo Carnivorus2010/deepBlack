@@ -104,6 +104,20 @@ Documentation audit:
 - Documented managed greetd, VT palette, and GRUB workflows.
 - Added the missing dwl component document.
 
+### v0.1.8 ARC and Carbon Flavors and Runtime Hardening
+
+Completed:
+
+- ARC flavor profile and wallpaper.
+- Carbon flavor profile.
+- GTK 3 and Thunar integration.
+- Installed application launchers and repository-independent runtime paths.
+- Source-built Mako runtime installed outside the repository.
+- Managed Mako systemd user service.
+- Flavor-aware wallpaper lifecycle.
+- Generated machine-and-flavor GRUB themes.
+- Transactional GRUB installer with rollback.
+
 ## Next v0.1.x Work
 
 ### Additional Machine Profiles

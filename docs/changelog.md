@@ -2,6 +2,57 @@
 
 Design and implementation decisions should be logged here.
 
+## v0.1.8
+
+### ARC Flavor and Carbon Flavors
+
+- Added the ARC flavor profile with a restrained blue-black palette and cyan interaction accent.
+- Added the Carbon flavor profile with matte charcoal surfaces and metallic interaction light.
+- Added the tracked ARC wallpaper at `assets/wallpapers/arc.png`.
+- Added GTK 3 generation and installation for flavor-aware graphical applications.
+- Added Thunar as the explicit graphical file-manager fallback.
+- Added `MOD + Shift + e` for Thunar.
+- Moved fullscreen to `MOD + Ctrl + e`.
+
+### Generated Component Pipeline
+
+- Extended `tools/generate_themes.py` to generate:
+  - dwl design tokens
+  - Mako tokens
+  - Foot configuration
+  - wmenu launcher
+  - GTK 3 settings and CSS
+  - wallpaper image, mode, and solid-color fallback
+- Added flavor-aware wallpaper installation under `~/.local/share/deepblack/`.
+- Added stale-wallpaper protection when switching to a flavor without an image.
+- Added `tools/generate-grub-theme.py` for machine- and flavor-aware GRUB composition.
+- Added generated GRUB theme identity and graphics-mode metadata.
+
+### Runtime Hardening
+
+- Installed stable application launchers beneath `~/.local/bin`.
+- Removed dwl runtime dependencies on the repository location.
+- Hardened the Yazi, Thunar, editor, and screenshot launchers.
+- Added dependency reporting and clean screenshot-cancellation handling.
+- Installed the source-built Mako daemon beneath `~/.local/libexec/deepblack/`.
+- Added the tracked `deepblack-mako.service` systemd user unit.
+- Changed Mako tokens from a tracked source header to generated transient output.
+
+### GRUB
+
+- Replaced the static SilverBullet-only GRUB theme source with generated machine-and-flavor compositions.
+- Added explicit `--machine`, `--flavor`, `--dry-run`, and `--yes` installer options.
+- Added timestamped GRUB backups under `/var/backups/deepblack/grub/`.
+- Added candidate `grub.cfg` generation, theme-reference validation, syntax validation, and automatic rollback.
+- Verified the generated ARC GRUB theme through a successful reboot.
+
+### Verification
+
+- Verified a complete `generic + arc` build.
+- Verified Foot, dwl, wmenu, Neovim, Yazi, Thunar, GTK 3, Mako, greetd, wallpaper, and GRUB integration.
+- Verified all hardened application keybinds after relogging.
+- Verified ARC wallpaper installation and stale-image protection.
+
 ## v0.1.7
 
 Portability audit and first cross-hardware deepBlack deployment.
