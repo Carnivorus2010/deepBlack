@@ -1,0 +1,9 @@
+# Apply the generated deepBlack VT palette before greetd.
+
+type = scripted
+command = /usr/local/bin/deepblack-apply-vt-palette
+restart = false
+
+before: greetd
+
+@meta enable-via boot

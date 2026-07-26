@@ -40,6 +40,24 @@ deepblack_detect_user_backend() {
     return 1
 }
 
+deepblack_user_backend_is_active() {
+    _db_backend="${1:-$(deepblack_detect_user_backend)}"
+
+    case "$_db_backend" in
+        systemd)
+            systemctl --user show-environment >/dev/null 2>&1
+            ;;
+
+        dinit)
+            dinitctl --user list >/dev/null 2>&1
+            ;;
+
+        *)
+            return 1
+            ;;
+    esac
+}
+
 deepblack_user_service_dir() {
     _db_backend="${1:-$(deepblack_detect_user_backend)}"
     _db_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
