@@ -1,0 +1,9 @@
+# deepBlack Mako notification daemon
+
+type = process
+command = ${HOME}/.local/bin/deepblack-mako
+restart = on-failure
+restart-delay = 1
+load-options: export-passwd-vars
+
+@meta enable-via boot

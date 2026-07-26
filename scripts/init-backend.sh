@@ -40,6 +40,29 @@ deepblack_detect_user_backend() {
     return 1
 }
 
+deepblack_user_service_dir() {
+    _db_backend="${1:-$(deepblack_detect_user_backend)}"
+    _db_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+    case "$_db_backend" in
+        systemd)
+            printf '%s\n' "$_db_config_home/systemd/user"
+            ;;
+
+        dinit)
+            printf '%s\n' "$_db_config_home/dinit.d"
+            ;;
+
+        *)
+            printf \
+                'deepBlack: no user-service directory for backend: %s\n' \
+                "$_db_backend" \
+                >&2
+            return 1
+            ;;
+    esac
+}
+
 deepblack_import_session_environment() {
     _db_backend="${1:-$(deepblack_detect_user_backend)}"
 
@@ -105,6 +128,41 @@ deepblack_start_or_restart_user_service() {
         *)
             printf \
                 'deepBlack: cannot control %s without a supported backend\n' \
+                "$_db_service" \
+                >&2
+            return 1
+            ;;
+    esac
+}
+
+deepblack_enable_user_service() {
+    _db_service="${1%.service}"
+    _db_backend="${2:-$(deepblack_detect_user_backend)}"
+
+    case "$_db_backend" in
+        systemd)
+            systemctl --user daemon-reload
+            systemctl --user enable "${_db_service}.service"
+            ;;
+
+        dinit)
+            if ! command -v dinitctl >/dev/null 2>&1; then
+                printf \
+                    'deepBlack: dinitctl is required for the dinit backend\n' \
+                    >&2
+                return 1
+            fi
+
+            if dinitctl --user list >/dev/null 2>&1; then
+                dinitctl --user enable "$_db_service"
+            else
+                dinitctl --user --offline enable "$_db_service"
+            fi
+            ;;
+
+        *)
+            printf \
+                'deepBlack: cannot enable %s without a supported backend\n' \
                 "$_db_service" \
                 >&2
             return 1
