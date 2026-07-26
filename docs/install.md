@@ -19,6 +19,7 @@ Important source directories:
     config/grub/
     config/wayland-sessions/
     config/systemd/
+    config/dinit/
     profiles/machines/
     profiles/flavors/
     scripts/
@@ -93,7 +94,7 @@ Required for the current deepBlack workflow.
     chromium
     bitwarden-desktop
 
-The build installs the following runtime paths.
+The build installs these common runtime paths:
 
     ~/.local/bin/deepblack-wmenu
     ~/.local/bin/deepblack-editor
@@ -103,10 +104,15 @@ The build installs the following runtime paths.
     ~/.local/bin/deepblack-mako
     ~/.local/bin/deepblack-makoctl
     ~/.local/libexec/deepblack/mako
-    ~/.config/systemd/user/deepblack-mako.service
+    ~/.local/libexec/deepblack/init-backend.sh
     ~/.local/share/deepblack/wallpaper
     ~/.local/share/deepblack/background-color
     ~/.local/share/deepblack/wallpaper-mode
+
+The selected init backend installs one Mako user service:
+
+    systemd  -> ~/.config/systemd/user/deepblack-mako.service
+    dinit    -> ~/.config/dinit.d/deepblack-mako
 
 The `wallpaper` image path is present only when the selected flavor provides
 an image asset. Solid-color flavors use the generated background color instead.
@@ -199,24 +205,36 @@ Current flavor-profile responsibilities include:
 - Foot opacity behavior
 - generated VT palette behavior
 
-Machine and flavor are selected independently.
+Supported init backends are:
+
+    auto
+    systemd
+    dinit
+
+`auto` detects an active supported user-service manager. An explicit backend is
+recommended during fresh installation or when the user manager is not active.
 
 Default generic deepBlack build:
 
     ./build.sh
 
-SilverBullet Nord build:
+Explicit systemd build:
 
-    ./build.sh --machine silverbullet --flavor nord
+    ./build.sh --machine generic --flavor carbon --init-backend systemd
 
-The compatibility entry point forwards all arguments to `build.sh`:
+SilverBullet Nord build using dinit:
 
-    ./sync.sh --machine silverbullet --flavor nord
+    ./build.sh --machine silverbullet --flavor nord --init-backend dinit
+
+The compatibility entry point forwards all arguments:
+
+    ./sync.sh --machine silverbullet --flavor nord --init-backend dinit
 
 Environment variables may also provide defaults:
 
     DEEPBLACK_MACHINE=silverbullet
     DEEPBLACK_FLAVOR=nord
+    DEEPBLACK_INIT_BACKEND=dinit
 
 Explicit command-line arguments take precedence.
 
@@ -224,19 +242,22 @@ Explicit command-line arguments take precedence.
 
 The normal build performs the following work:
 
-1. Generate the selected machine profile.
-2. Generate the selected flavor assets.
-3. Synchronize transient headers into `source/dwl/`.
-4. Install Foot configuration.
-5. Generate and install Neovim configuration.
-6. Generate and install Yazi configuration.
-7. Generate and install the greetd VT palette.
-8. Install the session and greetd integration files.
-9. Build and install dwl.
+1. Resolve the selected systemd or dinit backend.
+2. Generate the selected machine profile.
+3. Generate the selected flavor assets.
+4. Synchronize transient headers into `source/dwl/`.
+5. Install Foot, GTK, wallpaper, Neovim, and Yazi configuration.
+6. Build and install the source-built Mako runtime.
+7. Install and enable the selected Mako user service.
+8. Generate and install the greetd VT palette.
+9. Install the session and greetd integration files.
+10. Install the selected backend's VT-palette integration.
+11. Build and install dwl.
 
-The build runs `systemctl daemon-reload` after installing the greetd drop-in.
+The systemd backend reloads systemd after installing its greetd drop-in. The
+dinit backend enables its one-shot VT-palette service.
 
-It intentionally does not:
+The build intentionally does not:
 
 - restart greetd
 - enable greetd
@@ -284,11 +305,15 @@ Source session files:
     scripts/session.sh
     scripts/autostart.sh
     scripts/status.sh
+    scripts/init-backend.sh
     scripts/apply-vt-palette.sh
     scripts/generate-vt-palette.sh
     config/greetd/config.toml
     config/wayland-sessions/deepblack.desktop
     config/systemd/greetd.service.d/deepblack-vt-palette.conf
+    config/systemd/user/deepblack-mako.service
+    config/dinit/system/deepblack-vt-palette
+    config/dinit/user/deepblack-mako
 
 The machine generator writes:
 
@@ -298,7 +323,7 @@ The flavor pipeline writes:
 
     generated/greetd/vtrgb
 
-Expected installed paths:
+Expected backend-neutral installed paths:
 
     /usr/local/bin/deepblack-session
     /usr/local/bin/deepblack-autostart
@@ -308,22 +333,29 @@ Expected installed paths:
     /usr/local/share/deepblack/vtrgb
     /etc/greetd/config.toml
     /usr/share/wayland-sessions/deepblack.desktop
-    /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
+
+Backend-specific palette integration:
+
+    systemd  -> /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
+    dinit    -> /etc/dinit.d/deepblack-vt-palette
 
 The intended session flow is:
 
-    greetd.service
+    system service manager
+        -> deepBlack VT-palette integration
         -> deepblack-apply-vt-palette
         -> greetd
         -> deepblack-greeter
         -> deepblack-session
         -> deepblack-status | dwl -s deepblack-autostart
 
-The active greeter uses `/usr/local/share/deepblack/vtrgb` through the systemd pre-start helper.
+The active greeter uses `/usr/local/share/deepblack/vtrgb` through the selected
+backend's VT-palette integration.
 
 Machine-local `/etc/vtrgb` handling is not part of the managed session path.
 
-Before enabling or restarting greetd, confirm these files exist and are executable:
+Before enabling or restarting greetd, confirm these files exist and are
+executable:
 
     /usr/local/bin/deepblack-session
     /usr/local/bin/deepblack-greeter
@@ -417,26 +449,27 @@ Launch keybind:
 
 After cloning the repository:
 
-1. Install the required Arch packages.
-2. Select the intended machine and flavor profiles.
-3. Run the complete build.
+1. Install the packages required by the target distribution.
+2. Confirm that the intended systemd or dinit service manager is installed.
+3. Select the intended machine, flavor, and init backend.
+4. Run the complete build.
 
-Generic deepBlack:
+Generic deepBlack on systemd:
 
-    ./build.sh
+    ./build.sh --machine generic --flavor deepblack --init-backend systemd
 
-SilverBullet Nord:
+SilverBullet Nord on dinit:
 
-    ./build.sh --machine silverbullet --flavor nord
+    ./build.sh --machine silverbullet --flavor nord --init-backend dinit
 
-4. Verify the installed session files before enabling or restarting greetd.
-5. Test login and logout behavior with a fallback TTY available.
-6. Install a GRUB theme separately when required:
+5. Verify the installed session files before enabling or restarting greetd.
+6. Test login and logout behavior with a fallback TTY available.
+7. Install a GRUB theme separately when required:
 
        ./scripts/install-grub-theme.sh
 
-7. Build and configure the vendored Mako daemon when needed.
-8. Verify the primary launch keybinds for the selected machine profile.
+8. Verify the managed Mako service and source-built daemon.
+9. Verify the primary launch keybinds for the selected machine profile.
 
 Common actions:
 

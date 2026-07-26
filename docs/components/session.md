@@ -17,16 +17,17 @@ deepBlack uses:
 
 ## Session Flow
 
-```text
-greetd.service
-  -> deepblack-apply-vt-palette
-  -> greetd
-    -> deepblack-greeter
-      -> deepblack-session
-        -> deepblack-status | dwl -s deepblack-autostart
-```
+    system service manager
+      -> deepBlack VT-palette integration
+        -> deepblack-apply-vt-palette
+      -> greetd
+        -> deepblack-greeter
+          -> deepblack-session
+            -> deepblack-status | dwl -s deepblack-autostart
 
-The systemd pre-start helper applies the selected flavor palette before tuigreet begins.
+The systemd backend uses a greetd pre-start drop-in. The dinit backend uses a
+one-shot service ordered before greetd. Both apply the selected flavor palette
+before tuigreet begins.
 
 ## Machine-Generated Greeter
 
@@ -71,59 +72,63 @@ The active greeter does not depend on `/etc/vtrgb` or a machine-local palette sc
 
 ## Source Files
 
-```text
-scripts/session.sh
-scripts/autostart.sh
-scripts/status.sh
-scripts/apply-vt-palette.sh
-scripts/generate-vt-palette.sh
-config/greetd/config.toml
-config/wayland-sessions/deepblack.desktop
-config/systemd/greetd.service.d/deepblack-vt-palette.conf
-profiles/machines/
-profiles/flavors/
-tools/generate-machine-profile.py
-```
+    scripts/session.sh
+    scripts/autostart.sh
+    scripts/status.sh
+    scripts/init-backend.sh
+    scripts/apply-vt-palette.sh
+    scripts/generate-vt-palette.sh
+    config/greetd/config.toml
+    config/wayland-sessions/deepblack.desktop
+    config/systemd/greetd.service.d/deepblack-vt-palette.conf
+    config/systemd/user/deepblack-mako.service
+    config/dinit/system/deepblack-vt-palette
+    config/dinit/user/deepblack-mako
+    profiles/machines/
+    profiles/flavors/
+    tools/generate-machine-profile.py
 
 ## Installed Files
 
-The normal build installs:
+The normal build installs these backend-neutral session files:
 
-```text
-/usr/local/bin/deepblack-session
-/usr/local/bin/deepblack-autostart
-/usr/local/bin/deepblack-status
-/usr/local/bin/deepblack-greeter
-/usr/local/bin/deepblack-apply-vt-palette
-/usr/local/share/deepblack/vtrgb
-/etc/greetd/config.toml
-/usr/share/wayland-sessions/deepblack.desktop
-/etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
-```
+    /usr/local/bin/deepblack-session
+    /usr/local/bin/deepblack-autostart
+    /usr/local/bin/deepblack-status
+    /usr/local/bin/deepblack-greeter
+    /usr/local/bin/deepblack-apply-vt-palette
+    /usr/local/share/deepblack/vtrgb
+    /etc/greetd/config.toml
+    /usr/share/wayland-sessions/deepblack.desktop
+
+The selected user-service backend installs:
+
+    systemd  -> ~/.config/systemd/user/deepblack-mako.service
+    dinit    -> ~/.config/dinit.d/deepblack-mako
+
+The selected system backend installs its palette integration:
+
+    systemd  -> /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
+    dinit    -> /etc/dinit.d/deepblack-vt-palette
 
 The active greetd configuration launches `/usr/local/bin/deepblack-greeter`.
 
 ## Build Examples
 
-Generic deepBlack environment:
+Generic deepBlack environment on systemd:
 
-```bash
-./build.sh
-```
+    ./build.sh --machine generic --flavor deepblack --init-backend systemd
 
-SilverBullet with the Nord flavor:
+SilverBullet with the Nord flavor on dinit:
 
-```bash
-./build.sh --machine silverbullet --flavor nord
-```
+    ./build.sh --machine silverbullet --flavor nord --init-backend dinit
 
 The same arguments may be forwarded through:
 
-```bash
-./sync.sh --machine silverbullet --flavor nord
-```
+    ./sync.sh --machine silverbullet --flavor nord --init-backend dinit
 
-The build installs the session layer but does not restart greetd automatically.
+The build installs the session layer and selected backend integration but does
+not restart greetd automatically.
 
 ## Status Provider
 
@@ -135,15 +140,15 @@ Otherwise it provides a built-in fallback containing battery state when availabl
 
 Keep a fallback TTY available while changing greetd or the session launcher.
 
-Before enabling or restarting greetd, confirm these files exist and are executable:
+Before enabling or restarting greetd, confirm these files exist and are
+executable:
 
-```text
-/usr/local/bin/deepblack-session
-/usr/local/bin/deepblack-greeter
-/usr/local/bin/deepblack-apply-vt-palette
-```
+    /usr/local/bin/deepblack-session
+    /usr/local/bin/deepblack-greeter
+    /usr/local/bin/deepblack-apply-vt-palette
 
-The build runs `systemctl daemon-reload` but intentionally does not restart the display manager.
+The build reloads or enables the selected backend's service configuration but
+intentionally does not restart the display manager.
 
 ## Tested State
 

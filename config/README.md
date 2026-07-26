@@ -53,19 +53,29 @@ The session entry launches:
 
     /usr/local/bin/deepblack-session
 
-## systemd
+## Init Backends
 
-`config/systemd/greetd.service.d/deepblack-vt-palette.conf` is the tracked greetd service drop-in.
+deepBlack supports systemd and dinit service-manager backends.
 
-Installed path:
+User Mako service sources:
 
-    /etc/systemd/system/greetd.service.d/deepblack-vt-palette.conf
+    config/systemd/user/deepblack-mako.service
+    config/dinit/user/deepblack-mako
 
-The drop-in runs:
+The selected backend installs one user service beneath:
+
+    systemd  -> ~/.config/systemd/user/deepblack-mako.service
+    dinit    -> ~/.config/dinit.d/deepblack-mako
+
+System palette integration sources:
+
+    config/systemd/greetd.service.d/deepblack-vt-palette.conf
+    config/dinit/system/deepblack-vt-palette
+
+The systemd backend installs a greetd drop-in. The dinit backend installs a
+one-shot service ordered before greetd. Both invoke:
 
     /usr/local/bin/deepblack-apply-vt-palette
-
-before greetd starts.
 
 The applied palette is read from:
 

@@ -32,21 +32,27 @@ The vendored source contains deepBlack-specific default styling and urgency beha
 
 ## Launcher
 
-The project launcher is:
+The project launcher source is:
 
     scripts/deepblack-mako.sh
 
-The installed notification service uses this launcher rather than the distribution-provided Mako binary path directly.
+The build installs it as:
 
-Runtime service name:
+    ~/.local/bin/deepblack-mako
 
-    deepblack-mako.service
+Both service backends execute the same installed launcher:
 
-Inspect it with:
+    config/systemd/user/deepblack-mako.service
+    config/dinit/user/deepblack-mako
 
-    systemctl --user status deepblack-mako.service
+Runtime service names:
 
-The launcher waits for the required Wayland and session-bus environment before starting the notification daemon.
+    systemd  -> deepblack-mako.service
+    dinit    -> deepblack-mako
+
+The launcher waits for the required Wayland and session-bus environment before
+starting the notification daemon. Session variables are imported through the
+backend-neutral init helper before the managed service is started or restarted.
 
 ## Build Dependencies
 
@@ -66,9 +72,13 @@ Core build support includes:
 
 ## Runtime Verification
 
-Confirm the service is active:
+On systemd:
 
     systemctl --user status deepblack-mako.service
+
+On dinit:
+
+    dinitctl --user is-started deepblack-mako
 
 Confirm the source-built daemon is running:
 

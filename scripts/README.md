@@ -20,7 +20,11 @@ Installed as:
 
 Starts background services for the deepBlack dwl session.
 
-Current responsibilities include wallpaper startup through `swaybg`.
+Current responsibilities include:
+
+- importing Wayland and D-Bus session variables into the selected user-service manager
+- starting or restarting the managed Mako service
+- wallpaper startup through `swaybg`
 
 Installed as:
 
@@ -58,6 +62,21 @@ Installed as:
 
 The helper is safe-failing. Missing palette support must not prevent greetd from starting.
 
+### init-backend.sh
+
+Provides backend-neutral user-service operations for systemd and dinit.
+
+Responsibilities include:
+
+- detecting the active or explicitly selected backend
+- locating the backend-specific user-service directory
+- importing graphical session environment variables
+- enabling, starting, and restarting managed user services
+
+Installed as:
+
+    ~/.local/libexec/deepblack/init-backend.sh
+
 ## Application Launchers
 
 ### editor.sh
@@ -86,7 +105,8 @@ Used by:
 
 ### deepblack-mako.sh
 
-Launches the source-built deepBlack Mako notification daemon.
+Launches the installed source-built deepBlack Mako notification daemon
+independently of the selected service manager.
 
 ## Installers
 
@@ -164,16 +184,34 @@ The generated file should not be edited by hand.
 
 ## Build Integration
 
-The root build performs session and greetd installation automatically:
+The root build performs session, user-service, and greetd integration
+automatically.
 
-    ./build.sh --machine silverbullet --flavor nord
+Arch with systemd:
+
+    ./build.sh \
+      --machine generic \
+      --flavor carbon \
+      --init-backend systemd
+
+SilverBullet with dinit:
+
+    ./build.sh \
+      --machine silverbullet \
+      --flavor nord \
+      --init-backend dinit
 
 The compatibility entry point forwards all arguments:
 
-    ./sync.sh --machine silverbullet --flavor nord
+    ./sync.sh \
+      --machine silverbullet \
+      --flavor nord \
+      --init-backend dinit
 
 Generated output and transient dwl headers can be removed with:
 
     ./clean.sh
 
-The build installs session files and reloads systemd configuration, but it does not restart greetd, enable greetd, modify GRUB, or reboot.
+The build installs and enables the selected Mako user service and installs the
+matching VT-palette integration. It does not restart greetd, enable greetd,
+modify GRUB, or reboot.
