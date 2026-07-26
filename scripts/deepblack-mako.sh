@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # deepBlack notification daemon launcher
-# Runs the source-tokenized Mako build from the deepBlack repository.
+# Runs the installed source-built Mako daemon independently of the service manager.
 
 MAKO_BIN="${DEEPBLACK_MAKO_BIN:-$HOME/.local/libexec/deepblack/mako}"
 LOG_DIR="$HOME/.local/state/deepBlack"
@@ -23,8 +23,8 @@ if [ ! -x "$MAKO_BIN" ]; then
 fi
 
 # Wait briefly for the Wayland socket during login/session startup.
-# This prevents systemd from marking the service failed if it starts
-# slightly before dwl creates the Wayland display socket.
+# This prevents the service manager from treating startup as failed when
+# Mako begins slightly before dwl creates the Wayland display socket.
 attempts=0
 while [ -z "$WAYLAND_DISPLAY" ] && [ "$attempts" -lt 50 ]; do
     if [ -n "$XDG_RUNTIME_DIR" ]; then
