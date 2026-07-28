@@ -124,35 +124,75 @@ Regenerates the Yazi theme and installs the source configuration into:
 
 ### install-grub-theme.sh
 
-Installs a tracked GRUB theme explicitly.
+Generates, validates, and installs a GRUB theme composed from a selected
+machine profile and flavor profile.
 
-Default theme:
+Usage:
 
-    config/grub/themes/silverbullet-nord/
+    ./scripts/install-grub-theme.sh [options]
 
-Default installation:
+Options:
 
-    ./scripts/install-grub-theme.sh
+    --machine NAME   Machine profile to compose
+    --flavor NAME    Flavor profile to compose
+    --dry-run        Generate and validate without modifying the system
+    --yes            Skip the interactive confirmation
+    -h, --help       Show usage information
+
+The selected profiles are read from:
+
+    profiles/machines/<machine>.json
+    profiles/flavors/<flavor>.json
+
+Generated GRUB assets are written beneath:
+
+    generated/grub/
+
+Before installing a theme, perform a dry run:
+
+    ./scripts/install-grub-theme.sh \
+      --machine silverbullet \
+      --flavor nord \
+      --dry-run
+
+Install the SilverBullet Nord theme:
+
+    ./scripts/install-grub-theme.sh \
+      --machine silverbullet \
+      --flavor nord
+
+Install the generic ARC theme:
+
+    ./scripts/install-grub-theme.sh \
+      --machine generic \
+      --flavor arc
+
+Unless `--yes` is supplied, the installer displays its installation plan and
+requires the user to type `INSTALL` before modifying the system.
 
 The installer:
 
-- validates the theme name and source
-- creates `/etc/default/grub.deepblack-backup` when absent
+- generates the machine- and flavor-aware GRUB composition
+- validates the generated theme and graphics mode
+- creates a timestamped backup beneath `/var/backups/deepblack/grub/`
 - installs the theme beneath `/boot/grub/themes/`
 - installs the required GRUB font
-- sets `GRUB_THEME`
-- sets `GRUB_GFXMODE`
-- regenerates `/boot/grub/grub.cfg`
+- updates `GRUB_THEME` in `/etc/default/grub`
+- updates `GRUB_GFXMODE` in `/etc/default/grub`
+- generates and validates a candidate `grub.cfg`
+- installs the validated configuration as `/boot/grub/grub.cfg`
+- restores the previous GRUB state automatically if installation fails
 
-The default graphics mode is:
+The graphics mode normally comes from the selected machine profile. It can be
+overridden for one installation with:
 
-    1280x800,auto
+    DEEPBLACK_GRUB_GFXMODE=1920x1080,auto \
+      ./scripts/install-grub-theme.sh \
+        --machine silverbullet \
+        --flavor nord
 
-Override it with:
-
-    DEEPBLACK_GRUB_GFXMODE=1920x1080,auto ./scripts/install-grub-theme.sh
-
-GRUB changes are intentionally separate from the normal build.
+GRUB installation is intentionally separate from the normal deepBlack build.
+A reboot is required to verify the visual result.
 
 ## Generators
 
