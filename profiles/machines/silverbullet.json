@@ -3,7 +3,7 @@
   "description": "Early 2015 13-inch MacBook Pro Retina",
   "greeter_greeting": "SilverBullet",
   "grub_gfxmode": "1280x800,auto",
-  "foot_font_size": 15,
+  "foot_font_size": 12,
   "natural_scrolling": true,
   "modkey": "LOGO",
   "monitors": [
