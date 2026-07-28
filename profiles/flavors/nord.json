@@ -38,6 +38,7 @@
     "alpha_mode": "matching"
   },
    "wallpaper": {
+    "asset": "nord.png",
     "mode": "fill"
   }
 }
