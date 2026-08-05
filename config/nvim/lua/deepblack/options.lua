@@ -22,7 +22,7 @@ vim.opt.background = "dark"
 
 vim.opt.number = true
 vim.opt.relativenumber = false
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "100"
 
