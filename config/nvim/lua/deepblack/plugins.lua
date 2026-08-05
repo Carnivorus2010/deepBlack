@@ -18,6 +18,23 @@ function M.setup()
 
   require("lazy").setup({
     {
+      "nvim-treesitter/nvim-treesitter",
+      dependencies = {
+        "neovim-treesitter/treesitter-parser-registry",
+      },
+      lazy = false,
+      build = ":TSUpdate",
+      config = function()
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = { "python" },
+          callback = function()
+            vim.treesitter.start()
+          end,
+        })
+      end,
+    },
+
+	{
       "nvim-telescope/telescope.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
       cmd = "Telescope",

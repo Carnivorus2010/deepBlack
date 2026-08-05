@@ -127,7 +127,7 @@ function M.apply()
   hl("Special", { fg = t.SYNTAX_SPECIAL })
   hl("SpecialChar", { fg = t.SYNTAX_SPECIAL })
   hl("Tag", { fg = t.SYNTAX_SPECIAL })
-  hl("Delimiter", { fg = t.SYNTAX_OPERATOR })
+  hl("Delimiter", { fg = t.TEXT_SECONDARY })
   hl("SpecialComment", { fg = t.SYNTAX_COMMENT })
   hl("Debug", { fg = t.STATE_WARNING })
 
@@ -159,14 +159,21 @@ function M.apply()
   hl("@variable.parameter", { link = "Parameter" })
   hl("@parameter", { link = "Parameter" })
 
+   -- Functions and callable objects
   hl("@function", { link = "Function" })
   hl("@function.call", { link = "Function" })
-  hl("@function.builtin", { link = "Function" })
+
+  -- Built-ins such as print(), len(), and range()
+  hl("@function.builtin", { link = "Type" })
+
   hl("@function.macro", { link = "Macro" })
-  hl("@function.method", { link = "Function" })
-  hl("@function.method.call", { link = "Function" })
-  hl("@method", { link = "Function" })
-  hl("@method.call", { link = "Function" })
+
+  -- Object/module methods such as ts.style_text()
+  hl("@function.method", { link = "Property" })
+  hl("@function.method.call", { link = "Property" })
+  hl("@method", { link = "Property" })
+  hl("@method.call", { link = "Property" })
+
   hl("@constructor", { link = "Type" })
 
   hl("@keyword", { link = "Keyword" })
@@ -187,13 +194,34 @@ function M.apply()
   hl("@attribute", { link = "PreProc" })
   hl("@attribute.builtin", { link = "PreProc" })
 
-  hl("@punctuation.delimiter", { link = "Delimiter" })
-  hl("@punctuation.bracket", { link = "Delimiter" })
+    -- Structural punctuation
+  hl("@punctuation.delimiter", { fg = t.TEXT_SECONDARY })
+  hl("@punctuation.bracket", { fg = t.SYNTAX_OPERATOR })
   hl("@punctuation.special", { link = "Special" })
 
   hl("@tag", { link = "Tag" })
   hl("@tag.attribute", { link = "Property" })
   hl("@tag.delimiter", { link = "Delimiter" })
+
+  -- LSP semantic token language
+  -- These preserve the same syntax roles when an attached language
+  -- server provides more precise symbol information.
+  hl("@lsp.type.variable", { link = "Identifier" })
+  hl("@lsp.type.parameter", { link = "Parameter" })
+  hl("@lsp.type.property", { link = "Property" })
+
+  hl("@lsp.type.function", { link = "Function" })
+  hl("@lsp.type.method", { link = "Property" })
+
+  hl("@lsp.type.class", { link = "Type" })
+  hl("@lsp.type.type", { link = "Type" })
+  hl("@lsp.type.namespace", { link = "Type" })
+
+  hl("@lsp.type.enum", { link = "Type" })
+  hl("@lsp.type.enumMember", { link = "Constant" })
+
+  hl("@lsp.type.decorator", { link = "PreProc" })
+  hl("@lsp.type.macro", { link = "Macro" })
 
   hl("DiagnosticError", { fg = t.STATE_CRITICAL })
   hl("DiagnosticWarn", { fg = t.STATE_WARNING })
