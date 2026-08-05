@@ -1,0 +1,54 @@
+{
+  "id": "ls_minimal",
+  "description": "Technological Minimalism, inspired by good ole Luke Smith",
+  "tokens": {
+    "SURFACE_00": "0x1a1a1aff",
+    "SURFACE_01": "0x222222ff",
+    "SURFACE_02": "0x2a2a2aff",
+    "SURFACE_03": "0x343434ff",
+    "SURFACE_04": "0x444444ff",
+
+    "TEXT_PRIMARY": "0xeeeeeeff",
+    "TEXT_SECONDARY": "0xbbbbbbff",
+    "TEXT_MUTED": "0x777777ff",
+
+    "ACCENT_PRIMARY": "0x005577ff",
+    "ACCENT_SECONDARY": "0x9d963fff",
+    "ACCENT_DIAGNOSTIC": "0x4f8f8fff",
+
+    "STATE_SUCCESS": "0x7d944cff",
+    "STATE_WARNING": "0xc89b3cff",
+    "STATE_CRITICAL": "0xb54141ff",
+
+    "BORDER_INACTIVE": "0x444444ff",
+    "BORDER_ACTIVE": "0x770000ff",
+    "BORDER_CRITICAL": "STATE_CRITICAL",
+
+    "SYNTAX_COMMENT": "0x5f8f88ff",
+    "SYNTAX_KEYWORD": "0xd6c35cff",
+    "SYNTAX_FUNCTION": "0xc792eaff",
+    "SYNTAX_STRING": "0xd95d55ff",
+    "SYNTAX_NUMBER": "0xf0a45dff",
+    "SYNTAX_TYPE": "0x7aa2dfff",
+    "SYNTAX_CONSTANT": "0xff746cff",
+    "SYNTAX_OPERATOR": "0x75c7d4ff",
+    "SYNTAX_SPECIAL": "0xe0af68ff",
+    "SYNTAX_VARIABLE": "0xeeeeeeff",
+    "SYNTAX_PROPERTY": "0x79c99eff",
+    "SYNTAX_PARAMETER": "0xd8b87aff",
+    "SYNTAX_PREPROC": "0x9b82d0ff"
+  },
+  "foot": {
+    "alpha": 0.82,
+    "alpha_mode": "matching"
+  },
+  "gtk": {
+    "theme": "Arc-Darkest",
+    "icon_theme": "Adwaita",
+    "font": "JetBrainsMono Nerd Font 10"
+  },
+  "wallpaper": {
+    "asset": "ls_minimal.png",
+    "mode": "fill"
+  }
+}
